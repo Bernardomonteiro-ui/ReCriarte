@@ -1,5 +1,6 @@
 import { company } from '@/config/company';
 import { services } from '@/data/services';
+import { absUrl } from '@/utils/url';
 
 const clean = <T extends Record<string, unknown>>(o: T) =>
   Object.fromEntries(Object.entries(o).filter(([, v]) => v !== '' && v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0)));
@@ -9,11 +10,11 @@ export function localBusiness(site: URL) {
   return clean({
     '@context': 'https://schema.org',
     '@type': 'HomeAndConstructionBusiness',
-    '@id': new URL('/#empresa', site).href,
+    '@id': absUrl('/#empresa', site),
     name: company.name,
     description: 'Manutenção, adaptação, montagem e peças sob medida para móveis planejados em Londrina — PR.',
-    url: site.href,
-    image: new URL('/og.png', site).href,
+    url: absUrl('/', site),
+    image: absUrl('/og.png', site),
     // TODO(asset): acrescentar `logo` (PNG quadrado ≥ 112px) quando a logo oficial chegar.
     knowsAbout: ['Manutenção de móveis planejados', 'Conserto de armário planejado', 'Troca de corrediça de gaveta', 'Troca de pistão de armário aéreo', 'Regulagem de portas de armário', 'Fita de borda', 'Adaptação de móveis planejados', 'Montagem e desmontagem de móveis planejados', 'Peças sob medida'],
     hasOfferCatalog: {
@@ -21,7 +22,7 @@ export function localBusiness(site: URL) {
       name: 'Serviços para móveis planejados',
       itemListElement: services.map((sv) => ({
         '@type': 'Offer',
-        itemOffered: { '@type': 'Service', name: sv.title, description: sv.summary, url: new URL(sv.href, site).href },
+        itemOffered: { '@type': 'Service', name: sv.title, description: sv.summary, url: absUrl(sv.href, site) },
       })),
     },
     // TODO(confirmar): com os horários confirmados, acrescentar openingHoursSpecification (dayOfWeek/opens/closes).
@@ -49,8 +50,8 @@ export function service(site: URL, opts: { name: string; description: string; pa
     name: opts.name,
     serviceType: opts.serviceType,
     description: opts.description,
-    url: new URL(opts.path, site).href,
-    provider: { '@id': new URL('/#empresa', site).href },
+    url: absUrl(opts.path, site),
+    provider: { '@id': absUrl('/#empresa', site) },
     areaServed: { '@type': 'City', name: company.city },
   };
 }
@@ -71,7 +72,7 @@ export function breadcrumbs(site: URL, items: { name: string; href: string }[]) 
       '@type': 'ListItem',
       position: idx + 1,
       name: i.name,
-      item: new URL(i.href, site).href,
+      item: absUrl(i.href, site),
     })),
   };
 }
@@ -80,10 +81,10 @@ export function website(site: URL) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': new URL('/#site', site).href,
+    '@id': absUrl('/#site', site),
     name: company.name,
-    url: site.href,
+    url: absUrl('/', site),
     inLanguage: 'pt-BR',
-    publisher: { '@id': new URL('/#empresa', site).href },
+    publisher: { '@id': absUrl('/#empresa', site) },
   };
 }

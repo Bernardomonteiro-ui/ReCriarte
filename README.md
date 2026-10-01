@@ -11,6 +11,16 @@ npm run preview
 
 Para gerar o build com o domínio definitivo: `SITE_URL=https://seudominio.com.br npm run build`.
 
+## Deploy (GitHub Pages)
+
+O workflow `.github/workflows/deploy.yml` compila e publica a cada push na `master`.
+
+1. No GitHub, abra **Settings → Pages → Build and deployment → Source** e escolha **GitHub Actions**. Com "Deploy from a branch", o GitHub tenta compilar o código como Jekyll e o build falha.
+2. Sem domínio próprio, o site fica em `https://<usuario>.github.io/Recriarte/`. O workflow informa o caminho (`BASE_PATH`) e a integração `integrations/base-links.mjs` prefixa os links internos.
+3. Com domínio próprio (Settings → Pages → Custom domain), o site fica na raiz e nada precisa mudar.
+
+Nos componentes, escreva os links internos sempre como `/caminho`. O prefixo é aplicado no build.
+
 ## Onde configurar
 
 | O quê | Arquivo |

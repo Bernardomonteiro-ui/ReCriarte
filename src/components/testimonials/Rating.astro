@@ -1,0 +1,34 @@
+---
+import { company, ratingLabel } from '@/config/company';
+interface Props { size?: 'sm' | 'lg' }
+const { size = 'sm' } = Astro.props;
+const r = company.rating;
+const label = `Nota ${ratingLabel} de 5, com ${r.count} avaliações no ${r.source}`;
+const Tag = company.googleProfile ? 'a' : 'div';
+---
+
+{r.confirmed && (
+  <Tag
+    class:list={['rating', `rating--${size}`]}
+    href={company.googleProfile || undefined}
+    target={company.googleProfile ? '_blank' : undefined}
+    rel={company.googleProfile ? 'noopener' : undefined}
+    aria-label={label}
+  >
+    <span class="rating-stars" aria-hidden="true">★★★★★</span>
+    <span class="rating-num" aria-hidden="true">{ratingLabel}</span>
+    <span class="rating-txt" aria-hidden="true">{r.count} avaliações<br />no {r.source}</span>
+  </Tag>
+)}
+
+<style>
+  .rating { display: inline-flex; align-items: center; gap: 14px; line-height: 1.2; }
+  .rating-stars { color: var(--navy); letter-spacing: 0.12em; font-size: 0.95rem; }
+  :global([data-theme='navy']) .rating-stars { color: var(--yellow); }
+  .rating-num { font-weight: 900; font-size: 1.6rem; letter-spacing: -0.04em; padding-inline: 14px; border-inline: 1px solid var(--line-strong); }
+  .rating-txt { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+  a.rating:hover .rating-txt { text-decoration: underline; }
+  .rating--lg .rating-num { font-size: clamp(4rem, 10vw, 9rem); border: 0; padding: 0; line-height: 0.9; }
+  .rating--lg { flex-wrap: wrap; gap: 8px 24px; }
+  .rating--lg .rating-stars { font-size: 1.4rem; color: var(--yellow); -webkit-text-stroke: 1px var(--navy); }
+</style>

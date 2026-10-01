@@ -1,0 +1,155 @@
+---
+/**
+ * "O móvel continua. A história muda."
+ * Seção sticky: o MESMO móvel passa por ANTES → INTERVENÇÃO → DEPOIS conforme o scroll.
+ * Com fotos reais (recriar/antes|intervencao|depois.jpg) as fotos substituem o desenho.
+ */
+import Frame from '@/components/ui/Frame.astro';
+import { getPhoto } from '@/utils/photos';
+
+const stages = [
+  { k: 'Antes', t: 'Portas caídas, gaveta travando, acabamento soltando.', photo: 'recriar/antes.jpg', mode: 'worn' as const },
+  { k: 'Intervenção', t: 'Regulagem, troca de ferragens, reparo e um novo projeto para o nicho.', photo: 'recriar/intervencao.jpg', mode: 'line' as const },
+  { k: 'Depois', t: 'O mesmo móvel. Funcionando — e com uma nova função.', photo: 'recriar/depois.jpg', mode: 'new' as const },
+];
+const hasPhotos = stages.every((s) => getPhoto(s.photo));
+---
+
+<section class="rc" data-theme="navy" aria-labelledby="rc-title" data-recriar>
+  <div class="rc-sticky">
+    <div class="rc-in container">
+      <div class="rc-copy">
+        <p class="eyebrow">05 — Recriar</p>
+        <h2 id="rc-title" class="rc-title">
+          O móvel continua.<br />
+          <span class="serif hl">A história muda.</span>
+        </h2>
+        <ol class="rc-steps" role="list">
+          {stages.map((s, i) => (
+            <li class:list={['rc-step', { 'is-on': i === 0 }]} data-rc-step={i}>
+              <span class="rc-step-n">0{i + 1}</span>
+              <div>
+                <p class="rc-step-k">{s.k}</p>
+                <p class="rc-step-t">{s.t}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="rc-stage">
+        {hasPhotos ? (
+          stages.map((s, i) => (
+            <div class:list={['rc-photo', { 'is-on': i === 0 }]} data-rc-photo={i}>
+              <Frame photo={s.photo} alt={`${s.k}: ${s.t}`} tone="deep" sizes="(min-width: 1000px) 60vw, 100vw" />
+            </div>
+          ))
+        ) : (
+          <Frame alt="O mesmo móvel planejado antes, durante e depois da intervenção" art={{ kind: 'planejado', mode: 'worn', dims: true }} tone="deep" class="rc-frame" data-rc-frame />
+        )}
+        <div class="rc-scan" aria-hidden="true" data-rc-scan></div>
+        <p class="rc-label tech" aria-hidden="true"><span data-rc-label>Antes</span> <span class="rc-label-n" data-rc-n>01 / 03</span></p>
+        <div class="rc-bar" aria-hidden="true"><span data-rc-bar></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rc { height: 320vh; position: relative; background: var(--navy-900); }
+  .rc-sticky { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; overflow: hidden; }
+  .rc-in { display: grid; grid-template-columns: minmax(0, 4.5fr) minmax(0, 7.5fr); gap: clamp(32px, 5vw, 96px); align-items: center; width: 100%; }
+  .rc-copy { display: grid; gap: clamp(28px, 4vw, 56px); }
+  .rc-title { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .rc-title .serif { font-weight: 400; font-size: 1.1em; }
+
+  .rc-steps { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .rc-step { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--line); opacity: 0.35; transition: opacity 0.6s; }
+  .rc-step.is-on { opacity: 1; }
+  .rc-step-n { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.14em; padding-top: 4px; }
+  .rc-step.is-on .rc-step-n { color: var(--yellow); }
+  .rc-step-k { font-weight: 800; font-size: var(--fs-md); text-transform: uppercase; letter-spacing: 0.1em; }
+  .rc-step-t { font-size: var(--fs-sm); opacity: 0.75; margin-top: 4px; max-width: 40ch; }
+
+  .rc-stage { position: relative; height: min(76svh, 760px); }
+  .rc-stage :global(.frame) { position: absolute; inset: 0; }
+  .rc-stage :global(.frame-draw) { width: 82%; }
+  .rc-photo { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s; }
+  .rc-photo.is-on { opacity: 1; }
+  .rc-scan {
+    position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 3;
+    background: var(--yellow); box-shadow: 0 0 24px 4px rgb(245 238 10 / 0.45);
+    opacity: 0; pointer-events: none;
+  }
+  .rc-label { position: absolute; left: 24px; top: 22px; z-index: 3; display: flex; gap: 14px; color: var(--yellow); }
+  .rc-label-n { color: var(--white); opacity: 0.6; }
+  .rc-bar { position: absolute; left: 24px; right: 24px; bottom: 22px; height: 2px; background: var(--line); z-index: 3; }
+  .rc-bar span { position: absolute; inset: 0; background: var(--yellow); transform-origin: left; transform: scaleX(0.33); }
+
+  /* Paleta "antes" no fundo escuro: desenho aparece claro */
+  .rc-stage :global(.pl--worn) { --pl-stroke: #c8ccd8; --pl-body: #2a3155; --pl-panel: #333a5e; --pl-panel-back: #262c4d; --pl-niche: #1c2244; --pl-item: #4a5277; --pl-item-alt: #59618a; --pl-hand: #9aa1bb; }
+  .rc-stage :global(.pl--line) { color: var(--white); }
+  .rc-stage :global(.pl--new) { --pl-body: #f8fbfe; --pl-panel: #eef2f8; --pl-stroke: #0e183b; }
+  .rc-stage :global(.pl--line .pl-hit), .rc-stage :global(.pl--line [data-part] .pl-hit) { fill-opacity: 0.1; }
+  .rc-stage :global(.pl--new .pl-floor), .rc-stage :global(.pl--new .pl-hatch-line) { stroke: rgb(248 251 254 / 0.6); }
+
+  @media (max-width: 1000px) {
+    .rc { height: 300vh; }
+    .rc-in { grid-template-columns: 1fr; gap: 24px; align-content: center; }
+    .rc-copy { gap: 18px; }
+    .rc-title { font-size: var(--fs-xl); }
+    .rc-step { display: none; padding: 0; border: 0; }
+    .rc-step.is-on { display: grid; }
+    .rc-steps { border: 0; min-height: 4.5em; }
+    .rc-stage { height: 52svh; }
+  }
+
+  :global(html:not(.motion)) .rc { height: auto; }
+  :global(html:not(.motion)) .rc-sticky { position: relative; height: auto; padding: var(--section-y) 0; }
+  :global(html:not(.motion)) .rc-step { opacity: 1; display: grid; }
+</style>
+
+<script>
+  import { ScrollTrigger, motionOn } from '@/scripts/motion';
+
+  const root = document.querySelector<HTMLElement>('[data-recriar]');
+  if (root && motionOn()) {
+    const modes = ['worn', 'line', 'new'];
+    const labels = ['Antes', 'Intervenção', 'Depois'];
+    const pl = root.querySelector<SVGSVGElement>('[data-rc-frame] .pl');
+    const photos = root.querySelectorAll<HTMLElement>('[data-rc-photo]');
+    const steps = root.querySelectorAll<HTMLElement>('[data-rc-step]');
+    const label = root.querySelector<HTMLElement>('[data-rc-label]')!;
+    const num = root.querySelector<HTMLElement>('[data-rc-n]')!;
+    const bar = root.querySelector<HTMLElement>('[data-rc-bar]')!;
+    const scan = root.querySelector<HTMLElement>('[data-rc-scan]')!;
+    let stage = 0;
+
+    const set = (i: number) => {
+      if (i === stage) return;
+      stage = i;
+      if (pl) {
+        modes.forEach((m) => pl.classList.remove(`pl--${m}`));
+        pl.classList.add(`pl--${modes[i]}`);
+        // na intervenção, as partes que recebem reparo acendem
+        pl.querySelectorAll('[data-part]').forEach((p) => p.classList.toggle('is-hot', i === 1));
+      }
+      photos.forEach((p, k) => p.classList.toggle('is-on', k === i));
+      steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
+      label.textContent = labels[i];
+      num.textContent = `0${i + 1} / 03`;
+      // varredura: a "mão" passando pelo móvel
+      scan.animate([{ top: '0%', opacity: 1 }, { top: '100%', opacity: 1 }, { top: '100%', opacity: 0 }], { duration: 900, easing: 'cubic-bezier(.65,0,.35,1)' });
+    };
+
+    ScrollTrigger.create({
+      trigger: root,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (st) => {
+        bar.style.transform = `scaleX(${Math.max(0.04, st.progress)})`;
+        set(st.progress < 0.36 ? 0 : st.progress < 0.7 ? 1 : 2);
+      },
+    });
+  }
+</script>

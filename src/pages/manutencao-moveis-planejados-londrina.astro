@@ -1,0 +1,90 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import Explorer from '@/components/sections/Explorer.astro';
+import BeforeAfter from '@/components/before-after/BeforeAfter.astro';
+import Process from '@/components/process/Process.astro';
+import Faq from '@/components/sections/Faq.astro';
+import RelatedServices from '@/components/sections/RelatedServices.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { maintenanceFaq } from '@/data/faq';
+import { faq, service, breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const path = '/manutencao-moveis-planejados-londrina';
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Manutenção', href: path }];
+const description =
+  'Manutenção de móveis planejados em Londrina: regulagem de portas, troca de dobradiças, corrediças de gaveta, pistões de basculante, puxadores e fita de borda. Mande uma foto pelo WhatsApp.';
+
+const items = [
+  { title: 'Portas e dobradiças', symptom: 'A porta não fecha, fica torta, raspa na outra ou caiu.', solution: 'Regulagem de altura, lateral e profundidade — ou troca da dobradiça quando ela já cedeu.', art: { kind: 'drawing', name: 'hinge' } as const, photo: 'manutencao/dobradica.jpg' },
+  { title: 'Gavetas e corrediças', symptom: 'A gaveta pesa, trava, sai do trilho ou não fecha até o fim.', solution: 'Ajuste ou troca das corrediças e alinhamento da frente da gaveta.', art: { kind: 'drawing', name: 'slide' } as const, photo: 'manutencao/corredica.jpg' },
+  { title: 'Basculantes e pistões', symptom: 'A porta do aéreo não para aberta ou desce sozinha.', solution: 'Troca do pistão e regulagem da porta basculante.', art: { kind: 'drawing', name: 'piston' } as const, photo: 'manutencao/pistao.jpg' },
+  { title: 'Puxadores', symptom: 'Puxador solto, quebrado ou que você quer trocar.', solution: 'Fixação ou substituição, respeitando a furação existente sempre que possível.', art: { kind: 'drawing', name: 'handle' } as const, photo: 'manutencao/puxador.jpg' },
+  { title: 'Fita de borda', symptom: 'A fita do acabamento descolou, levantou ou quebrou.', solution: 'Recolagem ou substituição da fita de borda.', art: { kind: 'drawing', name: 'edge' } as const, photo: 'manutencao/fita-de-borda.jpg' },
+  { title: 'Portas de correr', symptom: 'Pesada, barulhenta, travando ou fora do trilho.', solution: 'Ajuste de roldanas e trilhos para a porta voltar a deslizar.', art: { kind: 'planejado', mode: 'line', dims: true } as const, photo: 'manutencao/porta-de-correr.jpg' },
+];
+---
+
+<BaseLayout
+  title="Manutenção de móveis planejados em Londrina"
+  description={description}
+  serviceId="manutencao"
+  schema={[
+    service(site, { name: 'Manutenção de móveis planejados em Londrina', serviceType: 'Assistência técnica de móveis planejados', description, path }),
+    faq(maintenanceFaq),
+    breadcrumbs(site, crumbs),
+  ]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="01 — Manutenção"
+    lead="Porta caída, gaveta travando, basculante que não para aberto. Na maioria das vezes, o seu planejado não precisa ser trocado — precisa de ajuste, ferragem nova e cuidado."
+    art={{ kind: 'drawing', name: 'hinge' }}
+    photo="manutencao/hero.jpg"
+    imageAlt="Detalhe técnico de dobradiça com pontos de regulagem"
+    refCode="Manutenção · Ferragens"
+    ctaLabel="Preciso consertar meu móvel"
+    ctaHref={whatsappUrl(messages.service('manutenção'))}
+    secondaryLabel="Fazer o diagnóstico"
+    secondaryHref="/#diagnostico"
+  >
+    <Fragment slot="title">
+      <Line>Manutenção de</Line>
+      <Line>móveis planejados</Line>
+      <Line><span class="serif">em Londrina</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <Explorer
+    id="mt"
+    eyebrow="O que costuma dar problema"
+    title="Cada sintoma tem"
+    accent="uma causa — e um conserto."
+    items={items}
+  />
+
+  <section class="section" data-theme="mist" aria-labelledby="mt-ba">
+    <div class="container">
+      <h2 id="mt-ba" class="mt-h" data-split>
+        <Line>Antes de trocar,</Line>
+        <Line><span class="serif">regule.</span></Line>
+      </h2>
+      <p class="lead mt-lead" data-reveal>Uma porta fora do lugar dá a impressão de móvel velho. Às vezes, alguns minutos de regulagem mudam tudo.</p>
+      <div data-reveal="clip"><BeforeAfter id="manutencao" before="manutencao/antes.jpg" after="manutencao/depois.jpg" /></div>
+    </div>
+  </section>
+
+  <Process eyebrow="Como funciona" />
+  <Faq items={maintenanceFaq} title="Manutenção: dúvidas comuns" />
+  <RelatedServices current="manutencao" />
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .mt-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .mt-h :global(.serif) { font-weight: 400; }
+  .mt-lead { margin: 20px 0 clamp(32px, 4vw, 56px); }
+</style>

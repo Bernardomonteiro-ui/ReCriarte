@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import Explorer from '@/components/sections/Explorer.astro';
+import ProjetoExecucao from '@/components/before-after/ProjetoExecucao.astro';
+import Process from '@/components/process/Process.astro';
+import Faq from '@/components/sections/Faq.astro';
+import RelatedServices from '@/components/sections/RelatedServices.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { customFaq } from '@/data/faq';
+import { faq, service, breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const path = '/moveis-sob-medida-londrina';
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Peças sob medida', href: path }];
+const description =
+  'Peças e móveis sob medida em Londrina para completar o planejado que você já tem: módulos complementares, prateleiras, nichos, frentes e soluções específicas.';
+
+const items = [
+  { title: 'Módulos complementares', symptom: 'Faltou um armário, um gaveteiro, um módulo.', solution: 'Um módulo novo pensado para conversar com o móvel existente.', art: { kind: 'drawing', name: 'custom' } as const, photo: 'sob-medida/modulo.jpg' },
+  { title: 'Prateleiras e nichos', symptom: 'Um vão sem uso ou uma prateleira que nunca existiu.', solution: 'Peças sob medida para o espaço exato.', art: { kind: 'drawing', name: 'closet' } as const, photo: 'sob-medida/prateleiras.jpg' },
+  { title: 'Frentes e portas', symptom: 'Uma porta ou frente danificada que precisa ser refeita.', solution: 'Peça nova sob medida para substituir só o que precisa.', art: { kind: 'drawing', name: 'handle' } as const, photo: 'sob-medida/frentes.jpg' },
+  { title: 'Soluções específicas', symptom: 'Uma necessidade que nenhum móvel pronto resolve.', solution: 'Conversamos, medimos e desenhamos a peça certa para o seu caso.', art: { kind: 'planejado', mode: 'line', dims: true } as const, photo: 'sob-medida/solucoes.jpg' },
+];
+---
+
+<BaseLayout
+  title="Móveis e peças sob medida em Londrina"
+  description={description}
+  serviceId="sob-medida"
+  schema={[
+    service(site, { name: 'Peças e móveis sob medida', serviceType: 'Fabricação de peças sob medida para móveis planejados', description, path }),
+    faq(customFaq),
+    breadcrumbs(site, crumbs),
+  ]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="04 — Peças sob medida"
+    lead="O foco não é vender um móvel novo: é completar o que você já tem. Uma peça que faltava, um módulo complementar, uma solução específica — no mesmo cuidado do original."
+    art={{ kind: 'drawing', name: 'custom' }}
+    photo="sob-medida/hero.jpg"
+    imageAlt="Peça sob medida integrada a um móvel existente"
+    refCode="Sob medida · Complemento"
+    ctaLabel="Preciso de uma peça"
+    ctaHref={whatsappUrl(messages.service('peças sob medida'))}
+    secondaryLabel="Ver soluções"
+    secondaryHref="#sm-title"
+  >
+    <Fragment slot="title">
+      <Line>Peças e móveis</Line>
+      <Line>sob medida</Line>
+      <Line><span class="serif">em Londrina</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <section class="sm section" data-theme="navy" aria-label="Nosso foco">
+    <div class="container sm-in">
+      <p class="sm-quote" data-reveal>
+        A gente não começa do zero.<br />
+        <span class="serif hl">A gente começa do que você já tem.</span>
+      </p>
+      <p class="lead" data-reveal data-delay="0.1">
+        O foco da ReCriarte não é competir com as grandes lojas de planejados — é resolver necessidades do móvel existente — com peças que se encaixam nele.
+      </p>
+    </div>
+  </section>
+
+  <Explorer id="sm" eyebrow="O que fazemos sob medida" title="A peça certa" accent="para o que já existe." items={items} />
+
+  <section class="section" data-theme="mist" aria-labelledby="sm-px">
+    <div class="container">
+      <h2 id="sm-px" class="sm-h" data-split>
+        <Line>Medido, desenhado,</Line>
+        <Line><span class="serif">encaixado.</span></Line>
+      </h2>
+    </div>
+    <div class="container sm-wide">
+      <ProjetoExecucao
+        project="sob-medida/projeto.jpg"
+        execution="sob-medida/execucao.jpg"
+        projectArt={{ kind: 'drawing', name: 'custom' }}
+        executionArt={{ kind: 'planejado', mode: 'new' }}
+        projectText="A peça nova é desenhada a partir das medidas do móvel existente."
+        executionText="Instalada, ela parece ter estado sempre ali."
+      />
+    </div>
+  </section>
+
+  <Process eyebrow="Como funciona" />
+  <Faq items={customFaq} title="Sob medida: dúvidas comuns" />
+  <RelatedServices current="sob-medida" />
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .sm-in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: end; }
+  .sm-quote { font-size: var(--fs-2xl); font-weight: 800; letter-spacing: -0.045em; line-height: 1.02; }
+  .sm-quote .serif { font-weight: 400; }
+  .sm-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; margin-bottom: clamp(32px, 4vw, 56px); }
+  .sm-h :global(.serif) { font-weight: 400; }
+  @media (max-width: 900px) { .sm-in { grid-template-columns: 1fr; } .sm-wide { padding-inline: 0; } }
+</style>

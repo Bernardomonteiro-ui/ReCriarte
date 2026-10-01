@@ -1,0 +1,257 @@
+---
+import Frame from '@/components/ui/Frame.astro';
+import Line from '@/components/motion/Line.astro';
+import Rating from '@/components/testimonials/Rating.astro';
+import { company } from '@/config/company';
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true" data-h="bg"></div>
+
+  <div class="hero-in container">
+    <div class="hero-copy">
+      <p class="eyebrow" data-h="eyebrow">{company.cityLabel} · Móveis planejados</p>
+
+      <h1 id="hero-title" class="hero-title">
+        <span class="hero-a" data-h="l1">
+          <Line>Seu planejado</Line>
+          <Line>não precisa</Line>
+          <Line>ser <span class="hero-strike" data-h="strike">trocado.</span></Line>
+        </span>
+        <span class="hero-b" data-h="l2">
+          <Line>Precisa ser</Line>
+          <Line><span class="hero-word serif" data-h="word">recriado.
+            <svg class="hero-scribble" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M3 16 C 60 6, 140 4, 200 10 S 280 18, 297 8" /></svg>
+          </span></Line>
+        </span>
+      </h1>
+
+      <p class="hero-lead lead" data-h="lead">
+        Manutenção, adaptação e recuperação do móvel planejado que você já tem — para ele voltar a funcionar e ganhar uma nova vida.
+      </p>
+
+      <div class="hero-ctas" data-h="ctas">
+        <a href="/orcamento" class="btn">Pedir orçamento <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="#diagnostico" class="btn btn--ghost">Descobrir o problema</a>
+      </div>
+
+      <div class="hero-proof" data-h="proof"><Rating /></div>
+    </div>
+
+    <div class="hero-art" data-hero-art aria-hidden="false">
+      <div class="hero-layer hero-main" data-depth="0.6" data-h="img">
+        <Frame
+          photo="hero/hero.jpg"
+          alt="Móvel planejado em desenho técnico de projeto"
+          art={{ kind: 'planejado', mode: 'line', dims: true }}
+          tone="navy"
+          refCode="RC — 001"
+          caption="Elevação · Módulos A B C"
+          eager
+          sizes="(min-width: 900px) 58vw, 100vw"
+          class="hero-frame"
+        />
+      </div>
+
+      <div class="hero-layer hero-detail" data-depth="1.4" data-h="detail">
+        <Frame
+          photo="hero/detalhe.jpg"
+          alt="Detalhe de dobradiça com pontos de regulagem"
+          art={{ kind: 'drawing', name: 'hinge' }}
+          tone="white"
+          caption="Detalhe 01 · Regulagem"
+          sizes="240px"
+          class="hero-detail-frame"
+        />
+      </div>
+
+      <!-- linhas técnicas -->
+      <svg class="hero-layer hero-lines" data-depth="0.9" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" data-h="lines">
+        <line x1="0" y1="8" x2="100" y2="8" />
+        <line x1="92" y1="0" x2="92" y2="100" />
+        <line x1="4" y1="96" x2="64" y2="96" />
+      </svg>
+
+      <ul class="hero-layer hero-tags" data-depth="1.8" role="list" aria-label="O que cuidamos">
+        <li class="hero-tag" style="--x:20%;--y:34%" data-h="tag"><i></i><span>Porta · regulagem</span></li>
+        <li class="hero-tag" style="--x:53%;--y:79%" data-h="tag"><i></i><span>Gaveta · corrediça</span></li>
+        <li class="hero-tag hero-tag--r" style="--x:73%;--y:20%" data-h="tag"><i></i><span>Correr · trilho</span></li>
+      </ul>
+
+      <p class="hero-layer hero-vert tech" data-depth="0.4" data-h="tag">Recuperar · Adaptar · Recriar</p>
+      <p class="hero-layer hero-count tech" data-depth="0.4" data-h="tag"><span class="hl-ink">07</span> pontos que mais dão problema ↓</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: max(720px, 100svh);
+    padding-top: calc(var(--header-h) + 24px);
+    padding-bottom: clamp(40px, 5vw, 72px);
+    display: flex;
+    overflow: clip;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, transparent calc(100% - 1px), var(--line) 0) 0 0 / calc(100% / 12) 100%,
+      var(--white);
+    opacity: 0.9;
+  }
+  .hero-in {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+    gap: clamp(32px, 4vw, 72px);
+    align-items: center;
+    width: 100%;
+  }
+
+  /* ---- Texto ---- */
+  .hero-copy { display: grid; gap: clamp(20px, 2vw, 28px); align-content: center; }
+  .hero-title {
+    font-size: clamp(2.7rem, 0.6rem + 3.75vw, 5.2rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    font-weight: 900;
+    display: grid; gap: 0.18em;
+  }
+  .hero-a, .hero-b { display: block; }
+  .hero-b { color: var(--navy); }
+  .hero-strike { position: relative; display: inline-block; color: var(--gray); }
+  .hero-strike::after {
+    content: ''; position: absolute; left: -2%; right: -2%; top: 54%;
+    height: 0.09em; background: var(--yellow);
+    transform: scaleX(var(--strike, 1)); transform-origin: left;
+  }
+  .hero-word {
+    position: relative; display: inline-block;
+    font-size: 1.18em; font-weight: 400; letter-spacing: -0.02em;
+    padding-right: 0.08em;
+  }
+  .hero-scribble { position: absolute; left: 0; right: 0; bottom: -0.04em; width: 100%; height: 0.22em; overflow: visible; }
+  .hero-scribble path { fill: none; stroke: var(--yellow); stroke-width: 7; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .hero-lead { max-width: 44ch; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  /* ---- Composição ---- */
+  .hero-art {
+    position: relative;
+    height: min(76svh, 740px);
+    min-height: 520px;
+  }
+  .hero-layer { position: absolute; will-change: transform; }
+  .hero-main { inset: 0 0 0 8%; }
+  .hero-main :global(.hero-frame) { width: 100%; height: 100%; }
+  .hero-main :global(.frame-draw) { width: 84%; }
+  .hero-detail {
+    left: 0; bottom: 6%;
+    width: clamp(160px, 17vw, 260px);
+    aspect-ratio: 4 / 5;
+    box-shadow: 0 0 0 10px var(--white);
+  }
+  .hero-detail :global(.hero-detail-frame) { width: 100%; height: 100%; }
+  .hero-detail :global(.frame-draw) { width: 96%; }
+  .hero-lines { inset: -3% -2% -3% 4%; width: auto; height: auto; overflow: visible; pointer-events: none; }
+  .hero-lines line { stroke: var(--navy); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 3 5; opacity: 0.35; }
+
+  .hero-tags { inset: 0 0 0 8%; pointer-events: none; }
+  .hero-tag {
+    position: absolute; left: var(--x); top: var(--y);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--navy);
+  }
+  .hero-tag i {
+    width: 14px; height: 14px; border-radius: 50%; flex: none;
+    background: var(--yellow);
+    box-shadow: 0 0 0 4px rgb(245 238 10 / 0.25);
+    animation: pulse 2.6s var(--ease-out) infinite;
+  }
+  .hero-tag span { background: var(--white); padding: 7px 10px; white-space: nowrap; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 4px rgb(245 238 10 / 0.25); } 50% { box-shadow: 0 0 0 10px rgb(245 238 10 / 0); } }
+
+  .hero-vert { right: -6px; top: 50%; transform-origin: right top; rotate: -90deg; translate: 0 -50%; white-space: nowrap; color: var(--gray); }
+  .hero-count { left: 8%; top: -30px; color: var(--ink-soft); }
+  .hl-ink { color: var(--navy); font-weight: 800; }
+
+  /* estados iniciais antes da timeline (só com motion ativo) */
+  :global(.motion) [data-hero] :is([data-h='bg'], [data-h='eyebrow'], [data-h='lead'], [data-h='ctas'], [data-h='proof'], [data-h='tag'], [data-h='lines']) { opacity: 0; }
+  :global(.motion) [data-hero] :is([data-h='img'], [data-h='detail']) { clip-path: inset(0 0 100% 0); }
+  :global(.motion) [data-hero] .line-inner { transform: translateY(105%); }
+  :global(.motion) [data-hero] .hero-strike { --strike: 0; }
+
+  @media (max-width: 1100px) {
+    .hero-in { grid-template-columns: 1fr; }
+    .hero-art { height: auto; aspect-ratio: 4 / 4.2; min-height: 0; margin-top: 24px; }
+    .hero-vert { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero { min-height: 0; }
+    .hero-art { aspect-ratio: 4 / 5; margin-inline: calc(var(--gutter) * -1); }
+    .hero-main { inset: 0 0 18% 0; }
+    .hero-tags { inset: 0 0 18% 0; }
+    .hero-detail { width: 46%; left: var(--gutter); bottom: 0; box-shadow: 0 0 0 6px var(--white); }
+    .hero-tag:nth-child(3) { display: none; }
+    .hero-count { display: none; }
+    .hero-lines { display: none; }
+    .hero-main :global(.frame-cap) { display: none; }
+  }
+</style>
+
+<script>
+  import { gsap, motionOn, isTouch } from '@/scripts/motion';
+
+  const root = document.querySelector<HTMLElement>('[data-hero]');
+  if (root && motionOn()) {
+    const q = (k: string) => root.querySelectorAll(`[data-h="${k}"]`);
+    const lines = (k: string) => root.querySelectorAll(`[data-h="${k}"] .line-inner`);
+    const strike = root.querySelector<HTMLElement>('[data-h="strike"]');
+    const scribble = root.querySelector<SVGPathElement>('.hero-scribble path');
+    const len = scribble?.getTotalLength() ?? 400;
+    if (scribble) gsap.set(scribble, { strokeDasharray: len, strokeDashoffset: len });
+
+    gsap.set([...lines('l1'), ...lines('l2')], { y: 0, yPercent: 105 });
+    gsap.set(strike, { '--strike': 0 });
+
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 });
+    tl.fromTo(q('bg'), { opacity: 0 }, { opacity: 0.9, duration: 1 })                                     // 1 fundo
+      .fromTo(q('eyebrow'), { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.9 }, 0.2)            // 2 eyebrow
+      .to(lines('l1'), { yPercent: 0, duration: 1.2, stagger: 0.1 }, 0.35)                                // 3 primeira frase
+      .to(strike, { '--strike': 1, duration: 0.7, ease: 'power3.inOut' }, 1.05)                           //   "trocado" riscado
+      .to(lines('l2'), { yPercent: 0, duration: 1.2, stagger: 0.1 }, 1.25)                                // 4 segunda frase
+      .to(scribble, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, 1.75)                   // 5 palavra destacada
+      .fromTo(q('img'), { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.6, ease: 'expo.inOut' }, 0.5) // 6 imagem
+      .fromTo(root.querySelectorAll('.hero-main .pl'), { scale: 1.08 }, { scale: 1, duration: 2.2 }, 0.6)
+      .fromTo(q('detail'), { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.2, ease: 'expo.inOut' }, 1.3)
+      .fromTo(q('lines'), { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 1.4 }, 1.5)    // 7 linhas técnicas
+      .fromTo(q('tag'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, 1.9)   // 8 labels
+      .fromTo(q('lead'), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1 }, 1.9)
+      .fromTo(q('ctas'), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1 }, 2.1)                   // 9 CTAs
+      .fromTo(q('proof'), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1 }, 2.3);                 // 10 prova social
+
+    // Parallax de mouse — extremamente sutil, só com mouse real
+    if (!isTouch()) {
+      const layers = [...root.querySelectorAll<HTMLElement>('[data-depth]')].map((el) => ({
+        d: parseFloat(el.dataset.depth ?? '1'),
+        x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3.out' }),
+        y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3.out' }),
+      }));
+      let raf = 0;
+      root.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const r = root.getBoundingClientRect();
+          const nx = (e.clientX - r.left) / r.width - 0.5;
+          const ny = (e.clientY - r.top) / r.height - 0.5;
+          layers.forEach((l) => { l.x(nx * 14 * l.d); l.y(ny * 10 * l.d); });
+        });
+      });
+      root.addEventListener('pointerleave', () => layers.forEach((l) => { l.x(0); l.y(0); }));
+    }
+  } else if (root) {
+    root.querySelectorAll<SVGPathElement>('.hero-scribble path').forEach((p) => (p.style.strokeDasharray = 'none'));
+  }
+</script>

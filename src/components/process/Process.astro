@@ -1,0 +1,86 @@
+---
+import Line from '@/components/motion/Line.astro';
+import { processSteps } from '@/data/content';
+interface Props { compact?: boolean; eyebrow?: string }
+const { compact = false, eyebrow = '08 — Processo' } = Astro.props;
+---
+
+<section class:list={['pr section', { 'pr--compact': compact }]} data-theme="navy" aria-labelledby="pr-title" data-process>
+  <div class="container">
+    <header class="pr-head">
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h2 id="pr-title" class="pr-title" data-split>
+        <Line>Você sabe o que</Line>
+        <Line><span class="hl">vai acontecer.</span></Line>
+      </h2>
+    </header>
+
+    <ol class="pr-steps" role="list">
+      <span class="pr-track" aria-hidden="true"><span class="pr-fill"></span><span class="pr-dot"></span></span>
+      {processSteps.map((s, i) => (
+        <li class="pr-step" data-pr-step={i}>
+          <span class="pr-node" aria-hidden="true"></span>
+          <span class="pr-num">{s.num}</span>
+          <h3 class="pr-h">{s.title}</h3>
+          <p class="pr-t">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .pr { --p: 0; overflow: hidden; }
+  .pr-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(56px, 8vw, 128px); }
+  .pr-head .eyebrow { padding-top: 1.2em; }
+  .pr-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+
+  .pr-steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2.4vw, 40px); padding-top: 48px; }
+  .pr-track { position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--line); }
+  .pr-fill { position: absolute; inset: 0; background: var(--yellow); transform-origin: left; transform: scaleX(var(--p)); }
+  .pr-dot {
+    position: absolute; top: 50%; left: calc(var(--p) * 100%);
+    width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+    background: var(--yellow); box-shadow: 0 0 0 6px rgb(245 238 10 / 0.18), 0 0 32px rgb(245 238 10 / 0.6);
+  }
+  .pr-step { position: relative; display: grid; gap: 14px; align-content: start; opacity: 0.38; transition: opacity 0.6s; }
+  .pr-step.is-on { opacity: 1; }
+  .pr-node { position: absolute; top: -55px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); box-shadow: inset 0 0 0 2px var(--line); transition: background-color 0.4s, box-shadow 0.4s; }
+  .pr-step.is-on .pr-node { background: var(--yellow); box-shadow: none; }
+  .pr-num { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.9; color: rgb(248 251 254 / 0.22); transition: color 0.5s; }
+  .pr-step.is-on .pr-num { color: var(--yellow); }
+  .pr-h { font-size: var(--fs-lg); letter-spacing: -0.03em; line-height: 1.1; }
+  .pr-t { font-size: var(--fs-sm); opacity: 0.7; max-width: 30ch; }
+
+  @media (max-width: 900px) {
+    .pr-head { grid-template-columns: 1fr; }
+    .pr-head .eyebrow { padding-top: 0; }
+    .pr-steps { grid-template-columns: 1fr; padding-top: 0; padding-left: 40px; gap: 48px; }
+    .pr-track { top: 0; bottom: 0; left: 5px; right: auto; width: 2px; height: auto; }
+    .pr-fill { transform-origin: top; transform: scaleY(var(--p)); }
+    .pr-dot { left: 50%; top: calc(var(--p) * 100%); margin: -9px 0 0 -9px; }
+    .pr-node { top: 0.6em; left: -40px; }
+  }
+  :global(html:not(.motion)) .pr { --p: 1; }
+  :global(html:not(.motion)) .pr-step { opacity: 1; }
+</style>
+
+<script>
+  import { ScrollTrigger, motionOn } from '@/scripts/motion';
+  document.querySelectorAll<HTMLElement>('[data-process]').forEach((root) => {
+    if (!motionOn()) return;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-pr-step]')];
+    const list = root.querySelector<HTMLElement>('.pr-steps')!;
+    ScrollTrigger.create({
+      trigger: list,
+      start: 'top 75%',
+      end: () => (window.innerWidth > 900 ? 'bottom 45%' : 'bottom 60%'),
+      scrub: true,
+      onUpdate: (st) => {
+        const p = st.progress;
+        root.style.setProperty('--p', p.toFixed(4));
+        steps.forEach((s, i) => s.classList.toggle('is-on', p >= (window.innerWidth > 900 ? i / steps.length : i / (steps.length - 0.5)) - 0.001));
+      },
+    });
+  });
+</script>

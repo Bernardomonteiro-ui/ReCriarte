@@ -1,0 +1,37 @@
+---
+import BeforeAfter from '@/components/before-after/BeforeAfter.astro';
+import Line from '@/components/motion/Line.astro';
+import { projects } from '@/data/portfolio';
+const p = projects.find((x) => x.beforeAfter);
+---
+
+<section class="tf section" aria-labelledby="tf-title">
+  <div class="container">
+    <header class="tf-head">
+      <p class="eyebrow" data-reveal>06 — Antes | Depois</p>
+      <h2 id="tf-title" class="tf-title" data-split>
+        <Line>Arraste.</Line>
+        <Line><span class="serif">Compare.</span></Line>
+      </h2>
+      <p class="lead" data-reveal>O mesmo móvel, antes e depois da ReCriarte. Sem trocar o que estava bom — recuperando o que precisava.</p>
+    </header>
+    <div data-reveal="clip">
+      <BeforeAfter id="home" before={p?.beforeAfter?.before} after={p?.beforeAfter?.after} />
+    </div>
+    <div class="tf-foot">
+      <p class="tech">Use o mouse, o dedo ou as setas do teclado</p>
+      <a href="/trabalhos" class="link-line">Ver mais trabalhos <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tf-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr); gap: 24px; align-items: end; margin-bottom: clamp(32px, 4vw, 56px); }
+  .tf-head .eyebrow { align-self: start; padding-top: 1em; }
+  .tf-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+  .tf-title .serif { font-weight: 400; }
+  .tf-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; color: var(--gray); }
+  .tf-foot .link-line { color: var(--navy); }
+  @media (max-width: 600px) { .tf :global(.ba) { aspect-ratio: 4 / 5 !important; } }
+  @media (max-width: 900px) { .tf-head { grid-template-columns: 1fr; } .tf-head .eyebrow { padding-top: 0; } }
+</style>

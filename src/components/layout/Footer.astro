@@ -1,0 +1,72 @@
+---
+import Logo from './Logo.astro';
+import { company, ratingLabel } from '@/config/company';
+import { services } from '@/data/services';
+import { nav } from '@/data/content';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr" data-theme="navy">
+  <div class="container">
+    <div class="ftr-top">
+      <a href="/" aria-label="ReCriarte — página inicial"><Logo /></a>
+      <p class="ftr-claim">Talvez você não precise trocar.<br /><span class="serif hl">Talvez só precise recriar.</span></p>
+    </div>
+
+    <div class="ftr-grid">
+      <nav aria-label="Navegação do rodapé">
+        <p class="tech ftr-h">Navegação</p>
+        <ul role="list">
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/empresas">Para empresas</a></li>
+          <li><a href="/orcamento">Orçamento</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Serviços">
+        <p class="tech ftr-h">Serviços</p>
+        <ul role="list">{services.map((s) => <li><a href={s.href}>{s.title}</a></li>)}</ul>
+      </nav>
+      <div>
+        <p class="tech ftr-h">Contato</p>
+        <ul role="list">
+          <li><a href={whatsappUrl(messages.default)} target="_blank" rel="noopener" data-wa="footer">WhatsApp{company.phoneDisplay && ` · ${company.phoneDisplay}`}</a></li>
+          {company.instagram && <li><a href={company.instagram} target="_blank" rel="noopener">Instagram</a></li>}
+          {company.googleProfile && <li><a href={company.googleProfile} target="_blank" rel="noopener">Google</a></li>}
+        </ul>
+      </div>
+      <div>
+        <p class="tech ftr-h">Onde estamos</p>
+        <ul role="list">
+          <li>{company.cityLabel}</li>
+          {company.address && <li>{company.address}</li>}
+          {company.hours.map((h) => <li>{h.days} · {h.hours}</li>)}
+          {company.rating.confirmed && <li class="ftr-rate"><span class="hl" aria-hidden="true">★</span> {ratingLabel} · {company.rating.count} avaliações no {company.rating.source}</li>}
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr-bottom">
+      <p>© {year} {company.name} — {company.legalTagline}{company.cnpj && ` · CNPJ ${company.cnpj}`}</p>
+      <a href="#conteudo" class="link-line">Voltar ao topo <span class="arrow" aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--navy-900); padding: clamp(64px, 8vw, 112px) 0 32px; font-size: var(--fs-sm); }
+  .ftr-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; padding-bottom: 56px; border-bottom: 1px solid var(--line); }
+  .ftr-claim { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; text-align: right; }
+  .ftr-claim .serif { font-weight: 400; }
+  .ftr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding-block: 48px; }
+  .ftr-h { opacity: 0.5; margin-bottom: 16px; }
+  .ftr ul { display: grid; gap: 10px; font-weight: 600; }
+  .ftr ul a { transition: color 0.3s; }
+  .ftr ul a:hover { color: var(--yellow); }
+  .ftr-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid var(--line); opacity: 0.7; font-size: var(--fs-xs); }
+  @media (max-width: 800px) {
+    .ftr-grid { grid-template-columns: 1fr 1fr; }
+    .ftr-claim { text-align: left; }
+  }
+  @media (max-width: 800px) { .ftr { padding-bottom: 96px; } }
+</style>

@@ -1,0 +1,93 @@
+---
+/**
+ * PROJETO × EXECUÇÃO — duas imagens grandes; a divisão se desloca com o scroll.
+ * Fallback: o mesmo móvel em traço (projeto) e executado (execução).
+ */
+import Frame from '@/components/ui/Frame.astro';
+import type { Art } from '@/utils/types';
+
+interface Props {
+  project?: string;
+  execution?: string;
+  projectArt?: Art;
+  executionArt?: Art;
+  projectText?: string;
+  executionText?: string;
+}
+const {
+  project, execution,
+  projectArt = { kind: 'planejado', mode: 'line', dims: true },
+  executionArt = { kind: 'planejado', mode: 'solid' },
+  projectText = 'Medidas, ferragens e acabamento definidos antes de qualquer intervenção.',
+  executionText = 'O que foi pensado, feito no lugar — com o mesmo cuidado do desenho.',
+} = Astro.props;
+---
+
+<div class="px" data-px>
+  <figure class="px-pane px-pane--p" data-px-a>
+    <Frame photo={project} alt="Projeto: desenho técnico do móvel" art={projectArt} tone="navy" sizes="(min-width: 900px) 50vw, 100vw" />
+    <figcaption class="px-cap">
+      <span class="px-k">Projeto</span>
+      <span class="px-t">{projectText}</span>
+    </figcaption>
+  </figure>
+  <div class="px-div" aria-hidden="true"><span>×</span></div>
+  <figure class="px-pane px-pane--e" data-px-b>
+    <Frame photo={execution} alt="Execução: o móvel pronto" art={executionArt} tone="mist" sizes="(min-width: 900px) 50vw, 100vw" />
+    <figcaption class="px-cap">
+      <span class="px-k">Execução</span>
+      <span class="px-t">{executionText}</span>
+    </figcaption>
+  </figure>
+</div>
+
+<style>
+  .px { --split: 50; display: flex; gap: 0; height: min(80svh, 760px); min-height: 460px; position: relative; }
+  .px-pane { position: relative; flex: 0 0 calc(var(--split) * 1%); overflow: hidden; margin: 0; }
+  .px-pane--e { flex: 1 1 auto; }
+  .px-pane :global(.frame) { width: 100%; height: 100%; }
+  .px-pane :global(.frame-draw) { width: min(80%, 640px); }
+  .px-pane--p :global(.frame-draw) { width: min(80%, 560px); }
+  .px-div { position: relative; width: 0; z-index: 3; }
+  .px-div::before { content: ''; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: var(--yellow); }
+  .px-div span {
+    position: absolute; top: 50%; left: 0; transform: translate(-50%, -50%);
+    width: 52px; height: 52px; display: grid; place-items: center;
+    background: var(--yellow); color: var(--navy); font-weight: 900; font-size: 1.4rem;
+  }
+  .px-cap {
+    position: absolute; left: 24px; right: 24px; bottom: 24px; z-index: 2;
+    display: grid; gap: 8px; max-width: 34ch;
+  }
+  .px-pane--p .px-cap { color: var(--white); }
+  .px-k { font-size: var(--fs-xl); font-weight: 900; letter-spacing: -0.04em; text-transform: uppercase; line-height: 1; }
+  .px-t { font-size: var(--fs-sm); opacity: 0.8; }
+  .px-pane :global(.frame-cap) { display: none; }
+
+  @media (max-width: 800px) {
+    .px { flex-direction: column; height: auto; }
+    .px-pane, .px-pane--e { flex: none; aspect-ratio: 4 / 4.2; }
+    .px-div { width: auto; height: 0; }
+    .px-div::before { top: -1px; bottom: auto; left: 0; right: 0; width: auto; height: 2px; }
+    .px-div span { left: 50%; top: 0; }
+  }
+</style>
+
+<script>
+  import { gsap, motionOn } from '@/scripts/motion';
+  document.querySelectorAll<HTMLElement>('[data-px]').forEach((root) => {
+    // dentro de painéis (dialog) não há scroll da página para guiar a animação
+    if (!motionOn() || root.closest('dialog')) return;
+    const desktop = window.matchMedia('(min-width: 801px)').matches;
+    const a = root.querySelector('[data-px-a]');
+    const b = root.querySelector('[data-px-b]');
+    const caps = root.querySelectorAll('.px-cap > *');
+    gsap.fromTo(a, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: root, start: 'top 75%', once: true } });
+    gsap.fromTo(b, { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', duration: 1.4, ease: 'expo.inOut', delay: 0.15, scrollTrigger: { trigger: root, start: 'top 75%', once: true } });
+    gsap.fromTo(caps, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, delay: 0.9, ease: 'expo.out', scrollTrigger: { trigger: root, start: 'top 75%', once: true } });
+    if (desktop) {
+      // a divisão "passa" do projeto para a execução enquanto você rola
+      gsap.fromTo(root, { '--split': 58 }, { '--split': 38, ease: 'none', scrollTrigger: { trigger: root, start: 'top 60%', end: 'bottom 30%', scrub: 0.8 } });
+    }
+  });
+</script>

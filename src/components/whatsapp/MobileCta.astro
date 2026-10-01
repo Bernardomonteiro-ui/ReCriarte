@@ -1,0 +1,43 @@
+---
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+---
+
+<div class="mcta" data-mcta>
+  <a href="/#diagnostico" class="mcta-diag">Descobrir o problema</a>
+  <a href={whatsappUrl(messages.default)} class="mcta-wa" target="_blank" rel="noopener" data-wa="mobile-bar">
+    WhatsApp <span aria-hidden="true">→</span>
+  </a>
+</div>
+
+<style>
+  .mcta {
+    display: none;
+    position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60;
+    grid-template-columns: 1fr auto;
+    background: var(--navy); color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 0 0 1px rgb(248 251 254 / 0.08);
+    transform: translateY(140%);
+    transition: transform 0.6s var(--ease-out);
+  }
+  .mcta.is-on { transform: none; }
+  .mcta a { display: flex; align-items: center; min-height: 52px; padding: 0 18px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+  .mcta-wa { background: var(--yellow); color: var(--navy); gap: 10px; }
+  @media (max-width: 800px) { .mcta { display: grid; } }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-mcta]');
+  if (bar) {
+    // aparece depois do hero; some no CTA final e no rodapé para não competir
+    const hide = document.querySelectorAll('[data-hide-mcta], footer');
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+      update();
+    });
+    hide.forEach((el) => io.observe(el));
+    const update = () => bar.classList.toggle('is-on', window.scrollY > window.innerHeight * 0.7 && visible.size === 0);
+    window.addEventListener('scroll', update, { passive: true });
+  }
+</script>

@@ -1,0 +1,109 @@
+---
+import Line from '@/components/motion/Line.astro';
+import Planejado from '@/components/illustrations/Planejado.astro';
+
+const steps = [
+  { k: 'Problema', mode: 'worn' as const, t: 'Algo parou de funcionar.' },
+  { k: 'Reparo', mode: 'line' as const, t: 'A gente entende e corrige.' },
+  { k: 'Novo uso', mode: 'new' as const, t: 'O móvel volta — às vezes melhor.' },
+];
+---
+
+<section class="mf section" id="manifesto" aria-labelledby="mf-title" data-manifesto>
+  <div class="container">
+    <div class="mf-head">
+      <p class="eyebrow" data-reveal>02 — Manifesto</p>
+      <h2 id="mf-title" class="mf-title" data-split>
+        <Line>Você não precisa</Line>
+        <Line>começar <span class="serif">do zero.</span></Line>
+      </h2>
+    </div>
+
+    <div class="mf-body">
+      <p class="mf-big" data-reveal>
+        Seu móvel planejado <span class="mark">já foi pensado</span> para o seu espaço.
+      </p>
+      <p class="lead" data-reveal data-delay="0.1">
+        Muitas vezes, o que ele precisa não é ser substituído, mas receber uma nova peça, uma nova função ou simplesmente voltar a funcionar como deveria.
+      </p>
+    </div>
+
+    <ol class="mf-flow" role="list" aria-label="Problema, reparo, novo uso">
+      <svg class="mf-track" viewBox="0 0 100 2" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" y1="1" x2="100" y2="1" class="mf-track-bg" />
+        <line x1="0" y1="1" x2="100" y2="1" class="mf-track-fg" data-mf-line />
+      </svg>
+      {steps.map((s, i) => (
+        <li class="mf-step" data-mf-step>
+          <div class="mf-thumb" class:list={[{ 'mf-thumb--dark': s.mode === 'line' }]}>
+            <Planejado mode={s.mode} title={`Móvel no estado: ${s.k}`} />
+          </div>
+          <span class="mf-dot" aria-hidden="true"></span>
+          <p class="mf-k"><span class="index-num">0{i + 1}</span> {s.k}{i < 2 && <span class="mf-arrow" aria-hidden="true"> →</span>}</p>
+          <p class="mf-t">{s.t}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .mf { background: var(--white); }
+  .mf-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; align-items: start; }
+  .mf-head .eyebrow { padding-top: 1.2em; }
+  .mf-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+  .mf-title .serif { font-weight: 400; }
+  .mf-body {
+    display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr);
+    gap: 24px; margin-top: clamp(40px, 6vw, 88px);
+  }
+  .mf-big { grid-column: 2; font-size: var(--fs-lg); font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; max-width: 22ch; }
+  .mf-body .lead { grid-column: 3; }
+
+  .mf-flow {
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 3vw, 48px);
+    margin-top: clamp(64px, 8vw, 120px);
+    padding: 0; list-style: none;
+  }
+  .mf-track { position: absolute; left: 0; right: 0; top: calc(var(--thumb-h, 0px)); width: 100%; height: 2px; display: none; }
+  .mf-track line { stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .mf-track-bg { stroke: var(--line); }
+  .mf-track-fg { stroke: var(--yellow); }
+
+  .mf-step { display: grid; gap: 14px; position: relative; }
+  .mf-thumb { background: var(--mist); aspect-ratio: 5 / 4; display: grid; place-items: center; padding: 10%; }
+  .mf-thumb--dark { background: var(--navy); color: var(--white); }
+  .mf-dot { width: 100%; height: 2px; background: var(--line); position: relative; margin-top: 10px; }
+  .mf-dot::after { content: ''; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--yellow); transform: scaleX(var(--p, 1)); transform-origin: left; }
+  .mf-dot::before { content: ''; position: absolute; left: 0; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); box-shadow: 0 0 0 4px var(--white); z-index: 1; }
+  .mf-k { font-weight: 800; font-size: var(--fs-md); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: baseline; gap: 10px; }
+  .mf-arrow { color: var(--gray); }
+  .mf-t { color: var(--ink-soft); }
+
+  @media (max-width: 900px) {
+    .mf-head, .mf-body { grid-template-columns: 1fr; }
+    .mf-head .eyebrow { padding-top: 0; }
+    .mf-big, .mf-body .lead { grid-column: auto; }
+    .mf-flow { grid-template-columns: 1fr; gap: 40px; }
+    .mf-step { grid-template-columns: 40% 1fr; align-items: center; column-gap: 20px; }
+    .mf-thumb { grid-row: span 3; }
+    .mf-dot { display: none; }
+  }
+</style>
+
+<script>
+  import { gsap, motionOn } from '@/scripts/motion';
+  const root = document.querySelector<HTMLElement>('[data-manifesto]');
+  if (root && motionOn()) {
+    const steps = root.querySelectorAll<HTMLElement>('[data-mf-step]');
+    // cada etapa só "acende" quando a anterior foi percorrida
+    steps.forEach((s) => s.style.setProperty('--p', '0'));
+    const tl = gsap.timeline({ scrollTrigger: { trigger: root.querySelector('.mf-flow'), start: 'top 80%', end: 'bottom 55%', scrub: 0.8 } });
+    steps.forEach((s, i) => {
+      tl.fromTo(s.querySelector('.mf-thumb'), { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: 'power2.out' }, i * 0.8)
+        .fromTo(s.querySelectorAll('.mf-k, .mf-t'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }, i * 0.8 + 0.3)
+        .to(s, { '--p': 1, duration: 0.8, ease: 'none' }, i * 0.8 + 0.4);
+    });
+  }
+</script>

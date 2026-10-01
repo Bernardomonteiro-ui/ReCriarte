@@ -1,0 +1,262 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Line from '@/components/motion/Line.astro';
+import PhotoUpload from '@/components/whatsapp/PhotoUpload.astro';
+import { issues } from '@/data/issues';
+import { breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Orçamento', href: '/orcamento' }];
+const problems = [...issues.map((i) => i.label), 'Montagem ou mudança', 'Preciso de uma peça sob medida', 'Outro'];
+const rooms = ['Cozinha', 'Quarto', 'Closet', 'Banheiro', 'Sala', 'Área de serviço', 'Escritório', 'Outro'];
+const photoOpts = ['Sim, já tenho', 'Vou tirar agora', 'Não consigo enviar'];
+---
+
+<BaseLayout
+  title="Pedir orçamento de manutenção de móveis planejados"
+  description="Peça um orçamento à ReCriarte em 4 perguntas: o que está acontecendo, o ambiente, as fotos e como falar com você. A conversa continua no WhatsApp."
+  schema={[breadcrumbs(site, crumbs)]}
+>
+  <section class="qt" aria-labelledby="qt-title" data-quote>
+    <div class="container qt-in">
+      <div class="qt-side">
+        <Breadcrumbs items={crumbs} />
+        <h1 id="qt-title" class="qt-title" data-split>
+          <Line>Quatro perguntas.</Line>
+          <Line><span class="serif">Um caminho.</span></Line>
+        </h1>
+        <p class="lead">Leva menos de um minuto. No fim, a mensagem vai pronta para o nosso WhatsApp.</p>
+
+        <div class="qt-summary" data-theme="navy" aria-live="polite">
+          <p class="tech qt-sum-k">Seu pedido</p>
+          <dl>
+            <div><dt class="tech">Problema</dt><dd data-sum="issue">—</dd></div>
+            <div><dt class="tech">Ambiente</dt><dd data-sum="room">—</dd></div>
+            <div><dt class="tech">Fotos</dt><dd data-sum="photos">—</dd></div>
+            <div><dt class="tech">Contato</dt><dd data-sum="contact">—</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <form class="qt-form" novalidate data-form>
+        <div class="qt-progress" aria-hidden="true">
+          {[1, 2, 3, 4].map((n) => <span class="qt-pip" data-pip={n}><i></i></span>)}
+        </div>
+        <p class="tech qt-count" data-count aria-live="polite">Pergunta 1 de 4</p>
+
+        <fieldset class="qt-step is-on" data-step="1">
+          <legend class="qt-q"><span class="index-num">01</span> O que está acontecendo?</legend>
+          <p class="qt-hint">Pode marcar mais de um.</p>
+          <div class="qt-opts">
+            {problems.map((p) => (
+              <label class="opt"><input type="checkbox" name="issue" value={p} /><span>{p}</span></label>
+            ))}
+          </div>
+          <label class="qt-field">
+            <span class="tech">Quer contar mais? (opcional)</span>
+            <textarea name="details" rows="3" placeholder="Ex.: a porta do armário da cozinha caiu de um lado"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset class="qt-step" data-step="2">
+          <legend class="qt-q"><span class="index-num">02</span> Qual ambiente?</legend>
+          <div class="qt-opts">
+            {rooms.map((r) => (
+              <label class="opt"><input type="radio" name="room" value={r} /><span>{r}</span></label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="qt-step" data-step="3">
+          <legend class="qt-q"><span class="index-num">03</span> Você tem fotos do móvel?</legend>
+          <div class="qt-opts">
+            {photoOpts.map((o) => (
+              <label class="opt"><input type="radio" name="photos" value={o} /><span>{o}</span></label>
+            ))}
+          </div>
+          <div class="qt-up" data-upwrap hidden><PhotoUpload id="qt-fotos" compact /></div>
+        </fieldset>
+
+        <fieldset class="qt-step" data-step="4">
+          <legend class="qt-q"><span class="index-num">04</span> Como podemos falar com você?</legend>
+          <label class="qt-field">
+            <span class="tech">Seu nome (opcional)</span>
+            <input type="text" name="name" autocomplete="given-name" placeholder="Como podemos te chamar?" />
+          </label>
+          <div class="qt-opts">
+            {['Por mensagem no WhatsApp', 'Prefiro uma ligação'].map((o, i) => (
+              <label class="opt"><input type="radio" name="contact" value={o} checked={i === 0} /><span>{o}</span></label>
+            ))}
+          </div>
+        </fieldset>
+
+        <p class="qt-err" data-err role="alert" hidden></p>
+
+        <div class="qt-nav">
+          <button type="button" class="link-line" data-prev hidden><span class="arrow" aria-hidden="true">←</span> Voltar</button>
+          <button type="button" class="btn" data-next>Próxima <span class="arrow" aria-hidden="true">→</span></button>
+          <a class="btn" href={whatsappUrl(messages.default)} target="_blank" rel="noopener" data-send data-wa="orcamento" hidden>Enviar pelo WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <p class="qt-note" data-note hidden>Ao abrir o WhatsApp, anexe as fotos na conversa — elas não são enviadas automaticamente.</p>
+
+        <noscript><p class="qt-note">Prefere falar direto? <a href={whatsappUrl(messages.default)}>Abrir o WhatsApp</a>.</p></noscript>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .qt { padding: calc(var(--header-h) + clamp(32px, 5vw, 72px)) 0 var(--section-y); min-height: 100svh; }
+  .qt-in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 112px); align-items: start; }
+  .qt-side { display: grid; gap: 24px; position: sticky; top: 100px; }
+  .qt-title { font-size: clamp(2.5rem, 1rem + 3.6vw, 5rem); letter-spacing: -0.05em; }
+  .qt-title :global(.serif) { font-weight: 400; }
+  .qt-summary { padding: 28px; display: grid; gap: 16px; }
+  .qt-sum-k { color: var(--yellow); }
+  .qt-summary dl { margin: 0; display: grid; }
+  .qt-summary dl > div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .qt-summary dt { opacity: 0.55; padding-top: 3px; }
+  .qt-summary dd { margin: 0; font-weight: 600; font-size: var(--fs-sm); }
+
+  .qt-form { display: grid; gap: 24px; }
+  .qt-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .qt-pip { height: 3px; background: var(--line); position: relative; overflow: hidden; }
+  .qt-pip i { position: absolute; inset: 0; background: var(--navy); transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--ease-out); }
+  .qt-pip.is-done i { transform: scaleX(1); }
+  .qt-pip.is-on i { transform: scaleX(1); background: var(--yellow); }
+  .qt-count { color: var(--gray); }
+
+  .qt-step { border: 0; padding: 0; margin: 0 0 32px; display: grid; gap: 20px; }
+  .qt.is-js .qt-step { display: none; margin: 0; }
+  .qt.is-js .qt-step.is-on { display: grid; animation: step 0.6s var(--ease-out); }
+  .qt:not(.is-js) .qt-nav, .qt:not(.is-js) .qt-progress, .qt:not(.is-js) .qt-count { display: none; }
+  @keyframes step { from { opacity: 0; transform: translateY(14px); } }
+  .qt-q { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; display: flex; gap: 14px; align-items: baseline; padding: 0; margin-bottom: 4px; }
+  .qt-hint { color: var(--ink-soft); font-size: var(--fs-sm); margin-top: -8px; }
+  .qt-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { position: relative; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .opt span {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px;
+    box-shadow: inset 0 0 0 1px var(--line-strong); font-weight: 600; font-size: var(--fs-sm);
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  }
+  .opt:hover span { box-shadow: inset 0 0 0 1.5px var(--navy); }
+  .opt input:checked + span { background: var(--navy); color: var(--white); box-shadow: none; }
+  .opt input:checked + span::before { content: '✓'; color: var(--yellow); margin-right: 8px; font-weight: 800; }
+  .opt input:focus-visible + span { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+  .qt-field { display: grid; gap: 8px; }
+  .qt-field .tech { color: var(--gray); }
+  .qt-field input, .qt-field textarea {
+    width: 100%; padding: 14px 16px; border: 0; border-radius: var(--radius);
+    background: var(--mist); box-shadow: inset 0 -2px 0 var(--line-strong);
+    font-size: var(--fs-base); resize: vertical;
+  }
+  .qt-field input:focus, .qt-field textarea:focus { outline: none; box-shadow: inset 0 -2px 0 var(--navy); background: #fff; }
+
+  .qt-err { color: #b00020; font-weight: 600; font-size: var(--fs-sm); }
+  .qt-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .qt-nav [data-next], .qt-nav [data-send] { margin-left: auto; }
+  .qt-note { font-size: var(--fs-sm); color: var(--ink-soft); border-left: 2px solid var(--yellow); padding-left: 12px; }
+
+
+  @media (max-width: 900px) {
+    .qt-in { grid-template-columns: 1fr; }
+    .qt-side { position: relative; top: 0; }
+    .qt-summary { display: none; }
+  }
+</style>
+
+<script>
+  import { whatsappUrl, messages } from '@/utils/whatsapp';
+  import { track } from '@/utils/track';
+
+  const root = document.querySelector<HTMLElement>('[data-quote]');
+  if (root) {
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const steps = [...form.querySelectorAll<HTMLElement>('[data-step]')];
+    const pips = [...form.querySelectorAll<HTMLElement>('[data-pip]')];
+    const prev = form.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = form.querySelector<HTMLButtonElement>('[data-next]')!;
+    const send = form.querySelector<HTMLAnchorElement>('[data-send]')!;
+    const err = form.querySelector<HTMLElement>('[data-err]')!;
+    const note = form.querySelector<HTMLElement>('[data-note]')!;
+    const count = form.querySelector<HTMLElement>('[data-count]')!;
+    const upWrap = form.querySelector<HTMLElement>('[data-upwrap]')!;
+    const sum = (k: string) => root.querySelector<HTMLElement>(`[data-sum="${k}"]`)!;
+    let i = 0;
+    let started = false;
+    let photoCount = 0;
+
+    // sem JS o formulário mostra tudo; com JS, uma pergunta por vez
+    root.classList.add('is-js');
+
+    const values = () => {
+      const fd = new FormData(form);
+      const issue = (fd.getAll('issue') as string[]).join(', ');
+      const details = String(fd.get('details') ?? '').trim();
+      const photoChoice = String(fd.get('photos') ?? '');
+      return {
+        issue: [issue, details].filter(Boolean).join(' — '),
+        room: String(fd.get('room') ?? ''),
+        photos: photoChoice + (photoCount ? ` (${photoCount} separada${photoCount > 1 ? 's' : ''} para enviar)` : ''),
+        name: String(fd.get('name') ?? '').trim(),
+        contact: String(fd.get('contact') ?? ''),
+      };
+    };
+
+    const valid = (n: number) => {
+      const v = values();
+      if (n === 0 && !v.issue) return 'Marque pelo menos uma opção ou conte o que está acontecendo.';
+      if (n === 1 && !v.room) return 'Escolha o ambiente.';
+      if (n === 2 && !v.photos) return 'Escolha uma opção.';
+      return '';
+    };
+
+    const render = () => {
+      steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
+      pips.forEach((p, k) => { p.classList.toggle('is-on', k === i); p.classList.toggle('is-done', k < i); });
+      prev.hidden = i === 0;
+      next.hidden = i === steps.length - 1;
+      send.hidden = i !== steps.length - 1;
+      note.hidden = !(i === steps.length - 1 && photoCount > 0);
+      count.textContent = `Pergunta ${i + 1} de ${steps.length}`;
+      err.hidden = true;
+      const v = values();
+      sum('issue').textContent = v.issue || '—';
+      sum('room').textContent = v.room || '—';
+      sum('photos').textContent = v.photos || '—';
+      sum('contact').textContent = [v.name, v.contact].filter(Boolean).join(' · ') || '—';
+      send.href = whatsappUrl(messages.quote(v));
+    };
+
+    const go = (n: number) => {
+      i = Math.max(0, Math.min(steps.length - 1, n));
+      render();
+      steps[i].querySelector<HTMLElement>('legend')?.setAttribute('tabindex', '-1');
+      steps[i].querySelector<HTMLElement>('legend')?.focus({ preventScroll: true });
+      if (window.innerWidth < 900) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    form.addEventListener('input', () => {
+      if (!started) { started = true; track('quote_started'); }
+      const photos = new FormData(form).get('photos');
+      upWrap.hidden = photos !== 'Sim, já tenho';
+      render();
+    });
+    form.addEventListener('photos:change', (e) => { photoCount = (e as CustomEvent<{ count: number }>).detail.count; render(); });
+    next.addEventListener('click', () => {
+      const msg = valid(i);
+      if (msg) { err.textContent = msg; err.hidden = false; return; }
+      go(i + 1);
+    });
+    prev.addEventListener('click', () => go(i - 1));
+    form.addEventListener('submit', (e) => e.preventDefault());
+    send.addEventListener('click', () => track('quote_completed', { room: values().room }));
+
+    render();
+  }
+</script>

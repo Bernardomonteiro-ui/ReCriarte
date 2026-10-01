@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import Explorer from '@/components/sections/Explorer.astro';
+import BeforeAfter from '@/components/before-after/BeforeAfter.astro';
+import ProjetoExecucao from '@/components/before-after/ProjetoExecucao.astro';
+import Process from '@/components/process/Process.astro';
+import Faq from '@/components/sections/Faq.astro';
+import RelatedServices from '@/components/sections/RelatedServices.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { adaptationFaq } from '@/data/faq';
+import { faq, service, breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const path = '/adaptacao-moveis-planejados';
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Adaptação', href: path }];
+const description =
+  'Adaptação de móveis planejados em Londrina: novas funções, divisões, nichos, mudança de configuração e reaproveitamento do móvel que você já tem.';
+
+const items = [
+  { title: 'Novas funções', symptom: 'O móvel está bom, mas não serve mais para a sua rotina.', solution: 'Repensar o uso dos módulos: um nicho vira apoio, um armário vira despensa.', art: { kind: 'planejado', mode: 'new' } as const, photo: 'adaptacao/novas-funcoes.jpg' },
+  { title: 'Divisões e nichos', symptom: 'Falta lugar para guardar — ou sobra espaço mal aproveitado.', solution: 'Novas prateleiras, divisórias e nichos dentro do móvel existente.', art: { kind: 'drawing', name: 'closet' } as const, photo: 'adaptacao/divisoes.jpg' },
+  { title: 'Mudança de configuração', symptom: 'O ambiente mudou e o móvel ficou “errado” no espaço.', solution: 'Reorganização de módulos e alterações de configuração.', art: { kind: 'drawing', name: 'exploded' } as const, photo: 'adaptacao/configuracao.jpg' },
+  { title: 'Reaproveitamento', symptom: 'Você tem peças boas que não estão sendo usadas.', solution: 'Avaliar o que pode ser reaproveitado em outro cômodo ou em outra função.', art: { kind: 'drawing', name: 'custom' } as const, photo: 'adaptacao/reaproveitamento.jpg' },
+];
+---
+
+<BaseLayout
+  title="Adaptação de móveis planejados em Londrina"
+  description={description}
+  serviceId="adaptacao"
+  schema={[
+    service(site, { name: 'Adaptação de móveis planejados', serviceType: 'Adaptação e alteração de móveis planejados', description, path }),
+    faq(adaptationFaq),
+    breadcrumbs(site, crumbs),
+  ]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="02 — Adaptação"
+    lead="Sua casa mudou, sua rotina mudou. O móvel pode mudar junto — ganhando nova função, nova divisão ou uma nova configuração, sem começar do zero."
+    art={{ kind: 'planejado', mode: 'new' }}
+    photo="adaptacao/hero.jpg"
+    imageAlt="Móvel planejado adaptado com nicho iluminado"
+    refCode="Adaptação · Novo uso"
+    ctaLabel="Quero adaptar meu móvel"
+    ctaHref={whatsappUrl(messages.service('adaptação'))}
+    secondaryLabel="Ver antes e depois"
+    secondaryHref="#ad-ba"
+  >
+    <Fragment slot="title">
+      <Line>Adaptação de</Line>
+      <Line>móveis planejados</Line>
+      <Line><span class="serif">em Londrina</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" data-theme="mist" aria-labelledby="ad-ba" id="ad-ba">
+    <div class="container">
+      <div class="ad-head">
+        <h2 id="ad-ba-t" class="ad-h" data-split>
+          <Line>O mesmo móvel.</Line>
+          <Line><span class="serif">Outra vida.</span></Line>
+        </h2>
+        <p class="lead" data-reveal>Arraste para comparar. A estrutura continua; o que muda é como ela trabalha para você.</p>
+      </div>
+      <div data-reveal="clip"><BeforeAfter id="adaptacao" before="adaptacao/antes.jpg" after="adaptacao/depois.jpg" /></div>
+    </div>
+  </section>
+
+  <Explorer id="ad" eyebrow="O que dá para fazer" title="Seu móvel pode" accent="aprender coisas novas." items={items} />
+
+  <section class="section" aria-labelledby="ad-px">
+    <div class="container">
+      <h2 id="ad-px" class="ad-h ad-h--sm" data-split>
+        <Line>Primeiro, o <span class="serif">projeto.</span></Line>
+        <Line>Depois, a execução.</Line>
+      </h2>
+    </div>
+    <div class="container ad-wide">
+      <ProjetoExecucao
+        project="adaptacao/projeto.jpg"
+        execution="adaptacao/execucao.jpg"
+        executionArt={{ kind: 'planejado', mode: 'new' }}
+        projectText="A adaptação começa no desenho: o que fica, o que muda, o que entra."
+        executionText="O móvel existente recebe a nova configuração."
+      />
+    </div>
+  </section>
+
+  <Process eyebrow="Como funciona" />
+  <Faq items={adaptationFaq} title="Adaptação: dúvidas comuns" />
+  <RelatedServices current="adaptacao" />
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .ad-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; margin-bottom: clamp(32px, 4vw, 56px); }
+  .ad-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .ad-h--sm { margin-bottom: clamp(32px, 4vw, 56px); }
+  .ad-h :global(.serif) { font-weight: 400; }
+  @media (max-width: 900px) { .ad-head { grid-template-columns: 1fr; } .ad-wide { padding-inline: 0; } }
+</style>

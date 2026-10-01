@@ -1,0 +1,76 @@
+---
+import Frame from '@/components/ui/Frame.astro';
+---
+
+<section class="tr" data-theme="navy" data-transition aria-label="Recupere o que já é seu">
+  <div class="tr-sticky">
+    <div class="tr-window" data-tr-window>
+      <Frame
+        photo="recriar/transicao.jpg"
+        alt="Móvel planejado recuperado"
+        art={{ kind: 'planejado', mode: 'line', dims: true }}
+        tone="deep"
+        bare
+        class="tr-frame"
+        sizes="100vw"
+      />
+    </div>
+    <p class="tr-text" data-tr-text aria-hidden="true">
+      Recupere <span class="serif">o que</span> já é <span class="serif hl">seu.</span>
+    </p>
+    <h2 class="sr-only">Recupere o que já é seu.</h2>
+    <div class="tr-meta container" aria-hidden="true">
+      <span class="tech">01 — Recuperar</span>
+      <span class="tech tr-scroll">Role <span>↓</span></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tr { height: 240vh; position: relative; background: var(--navy); }
+  .tr-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+  .tr-window {
+    position: absolute; inset: 0;
+    clip-path: inset(30% 38% 30% 38%);
+  }
+  .tr-window :global(.tr-frame) { width: 100%; height: 100%; }
+  .tr-window :global(.frame-draw) { width: min(70vw, 900px); opacity: 0.5; }
+  .tr-window :global(.frame) { background: var(--navy-700); }
+  .tr-text {
+    position: relative; z-index: 2;
+    white-space: nowrap;
+    font-size: var(--fs-mega);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--white);
+    will-change: transform;
+    translate: 0 0;
+  }
+  .tr-text .serif { font-weight: 400; letter-spacing: -0.03em; }
+  .tr-text .hl { color: var(--yellow); }
+  .tr-meta { position: absolute; left: 0; right: 0; bottom: 28px; display: flex; justify-content: space-between; z-index: 3; color: var(--white); }
+  .tr-scroll span { display: inline-block; animation: nudge 1.8s var(--ease-in-out) infinite; }
+  @keyframes nudge { 50% { transform: translateY(4px); } }
+
+  /* Sem motion: bloco estático e legível */
+  :global(html:not(.motion)) .tr { height: auto; }
+  :global(html:not(.motion)) .tr-sticky { position: relative; height: auto; padding: 120px 0; }
+  :global(html:not(.motion)) .tr-window { display: none; }
+  :global(html:not(.motion)) .tr-text { white-space: normal; text-align: center; font-size: var(--fs-3xl); padding-inline: var(--gutter); mix-blend-mode: normal; }
+</style>
+
+<script>
+  import { gsap, motionOn } from '@/scripts/motion';
+  const root = document.querySelector<HTMLElement>('[data-transition]');
+  if (root && motionOn()) {
+    const text = root.querySelector('[data-tr-text]');
+    const win = root.querySelector('[data-tr-window]');
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: 0.6 },
+    });
+    tl.fromTo(text, { xPercent: 45 }, { xPercent: -75, ease: 'none', duration: 1 }, 0)
+      .fromTo(win, { clipPath: 'inset(30% 38% 30% 38%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.inOut', duration: 0.75 }, 0.2)
+      .fromTo(root.querySelectorAll('.tr-window .pl'), { scale: 1.35 }, { scale: 1, ease: 'power2.out', duration: 0.8 }, 0.2);
+  }
+</script>

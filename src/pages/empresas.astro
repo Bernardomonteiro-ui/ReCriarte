@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import ProjetoExecucao from '@/components/before-after/ProjetoExecucao.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Para empresas', href: '/empresas' }];
+
+const audiences = [
+  { k: 'Arquitetos', t: 'Ajustes, adaptações e peças complementares para projetos que já foram entregues — ou que precisam continuar.' },
+  { k: 'Lojas de móveis', t: 'Montagem, assistência e manutenção do que foi vendido, com o cuidado que o seu cliente espera.' },
+  { k: 'Construtoras', t: 'Ajustes e manutenção em móveis planejados de unidades e áreas comuns.' },
+  { k: 'Empresas', t: 'Manutenção e adaptação do mobiliário planejado do seu espaço de trabalho.' },
+  { k: 'Parceiros', t: 'Profissionais e negócios que precisam de quem cuide do móvel depois da entrega.' },
+];
+---
+
+<BaseLayout
+  title="Para empresas: assistência e adaptação de móveis planejados"
+  description="A ReCriarte atende arquitetos, lojas de móveis, construtoras e empresas em Londrina com manutenção, montagem, adaptação e peças sob medida para móveis planejados."
+  schema={[breadcrumbs(site, crumbs)]}
+  headerTone="dark"
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="B2B — Parcerias"
+    lead="Para quem trabalha com móveis planejados e precisa de um parceiro que cuide do que vem depois: ajustes, assistência, montagem e adaptações."
+    art={{ kind: 'drawing', name: 'kitchen' }}
+    photo="b2b/hero.jpg"
+    imageAlt="Elevação técnica de cozinha planejada"
+    refCode="B2B · Continuidade"
+    ctaLabel="Falar com a ReCriarte"
+    ctaHref={whatsappUrl(messages.b2b)}
+    tone="navy"
+  >
+    <Fragment slot="title">
+      <Line>Quando o projeto</Line>
+      <Line>precisa <span class="serif hl">continuar.</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" aria-labelledby="em-t">
+    <div class="container">
+      <h2 id="em-t" class="em-h" data-split>
+        <Line>Para quem</Line>
+        <Line><span class="serif">a gente trabalha.</span></Line>
+      </h2>
+      <ol class="em-list" role="list">
+        {audiences.map((a, i) => (
+          <li class="em-row" data-reveal>
+            <span class="index-num">0{i + 1}</span>
+            <h3 class="em-k">{a.k}</h3>
+            <p class="em-t">{a.t}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" data-theme="mist" aria-labelledby="em-px">
+    <div class="container">
+      <h2 id="em-px" class="em-h" data-split>
+        <Line>O projeto é seu.</Line>
+        <Line><span class="serif">A continuidade, com a gente.</span></Line>
+      </h2>
+    </div>
+    <div class="container em-wide">
+      <ProjetoExecucao project="b2b/projeto.jpg" execution="b2b/execucao.jpg" />
+    </div>
+  </section>
+
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .em-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; margin-bottom: clamp(32px, 4vw, 64px); }
+  .em-h :global(.serif) { font-weight: 400; }
+  .em-list { border-top: 1px solid var(--line-strong); }
+  .em-row { display: grid; grid-template-columns: 52px minmax(0, 4fr) minmax(0, 7fr); gap: 20px; align-items: baseline; padding: 28px 0; border-bottom: 1px solid var(--line-strong); }
+  .em-k { font-size: var(--fs-xl); letter-spacing: -0.04em; }
+  .em-t { color: var(--ink-soft); max-width: 56ch; }
+  @media (max-width: 800px) { .em-row { grid-template-columns: 40px 1fr; } .em-t { grid-column: 2; } .em-wide { padding-inline: 0; } }
+</style>

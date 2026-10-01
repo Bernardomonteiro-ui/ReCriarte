@@ -1,0 +1,267 @@
+---
+/**
+ * Elevação técnica de um móvel planejado (3 módulos).
+ * A — porta de giro · B — basculantes, nicho, gaveteiro · C — portas de correr
+ *
+ * mode:
+ *  - line  → desenho de projeto (traço, cotas)
+ *  - solid → móvel executado
+ *  - worn  → "antes": desalinhamentos, fita soltando, puxador quebrado
+ *  - new   → "depois": alinhado, novo uso no nicho (iluminação)
+ *
+ * Cada parte tem data-part para o diagnóstico destacar.
+ */
+interface Props {
+  mode?: 'line' | 'solid' | 'worn' | 'new';
+  dims?: boolean;
+  class?: string;
+  title?: string;
+}
+const { mode = 'solid', dims = false, class: cls = '', title = 'Desenho técnico de um móvel planejado' } = Astro.props;
+const uid = Math.random().toString(36).slice(2, 8);
+---
+
+<svg
+  class:list={['pl', `pl--${mode}`, cls]}
+  viewBox="0 0 800 660"
+  role="img"
+  aria-label={title}
+  data-planejado
+>
+  <defs>
+    <pattern id={`hatch-${uid}`} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="pl-hatch-line"></line>
+    </pattern>
+    <linearGradient id={`led-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F5EE0A" stop-opacity="0.55"></stop>
+      <stop offset="1" stop-color="#F5EE0A" stop-opacity="0"></stop>
+    </linearGradient>
+    <linearGradient id={`shade-${uid}`} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0E183B" stop-opacity="0.07"></stop>
+      <stop offset="0.5" stop-color="#0E183B" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#0E183B" stop-opacity="0.05"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Piso -->
+  <line x1="0" y1="625" x2="800" y2="625" class="pl-floor"></line>
+  <rect x="0" y="626" width="800" height="22" fill={`url(#hatch-${uid})`} class="pl-hatch"></rect>
+
+  <!-- Caixa -->
+  <rect x="40" y="40" width="720" height="560" class="pl-carcass"></rect>
+  <rect x="52" y="600" width="696" height="25" class="pl-plinth"></rect>
+  <line x1="230" y1="40" x2="230" y2="600" class="pl-div"></line>
+  <line x1="520" y1="40" x2="520" y2="600" class="pl-div"></line>
+
+  <!-- A · Porta de giro -->
+  <g data-part="door" class="pl-part pl-door">
+    <rect x="46" y="46" width="180" height="548" class="pl-panel"></rect>
+    <rect x="46" y="46" width="180" height="548" fill={`url(#shade-${uid})`} class="pl-shade"></rect>
+    <rect x="204" y="262" width="7" height="120" class="pl-handle"></rect>
+    <!-- dobradiças (projeto) -->
+    <g class="pl-only-line">
+      <circle cx="58" cy="96" r="6"></circle><circle cx="58" cy="320" r="6"></circle><circle cx="58" cy="544" r="6"></circle>
+      <path d="M46 46 L226 320 L46 594" class="pl-swing"></path>
+    </g>
+    <rect x="46" y="46" width="180" height="548" class="pl-hit"></rect>
+  </g>
+
+  <!-- B · Basculantes -->
+  <g data-part="basculante" class="pl-part pl-bascA">
+    <rect x="236" y="46" width="137" height="100" class="pl-panel"></rect>
+    <rect x="280" y="131" width="50" height="5" class="pl-handle"></rect>
+    <path d="M236 146 L304 46 L373 146" class="pl-only-line pl-swing"></path>
+    <rect x="236" y="46" width="137" height="100" class="pl-hit"></rect>
+  </g>
+  <g class="pl-part pl-bascB">
+    <rect x="377" y="46" width="137" height="100" class="pl-panel"></rect>
+    <rect x="421" y="131" width="50" height="5" class="pl-handle"></rect>
+    <path d="M377 146 L445 46 L514 146" class="pl-only-line pl-swing"></path>
+  </g>
+
+  <!-- B · Nicho (adaptar / novo uso) -->
+  <g data-part="niche" class="pl-part">
+    <rect x="236" y="152" width="278" height="242" class="pl-niche"></rect>
+    <rect x="236" y="152" width="278" height="242" class="pl-hit"></rect>
+  </g>
+  <rect x="236" y="152" width="278" height="26" fill={`url(#led-${uid})`} class="pl-led"></rect>
+  <line x1="244" y1="153" x2="506" y2="153" class="pl-led-strip"></line>
+
+  <!-- itens do nicho -->
+  <g class="pl-items">
+    <rect x="262" y="210" width="14" height="60" class="pl-item"></rect>
+    <rect x="278" y="218" width="12" height="52" class="pl-item pl-item--alt"></rect>
+    <rect x="292" y="204" width="16" height="66" class="pl-item"></rect>
+    <rect x="312" y="226" width="12" height="44" class="pl-item pl-item--alt" transform="rotate(-12 318 270)"></rect>
+    <path d="M440 270 q-4 -36 14 -48 q18 12 14 48 z" class="pl-item pl-item--alt"></path>
+    <rect x="262" y="350" width="96" height="10" class="pl-item"></rect>
+    <rect x="266" y="340" width="88" height="10" class="pl-item pl-item--alt"></rect>
+    <rect x="264" y="330" width="92" height="10" class="pl-item"></rect>
+    <rect x="392" y="332" width="90" height="62" class="pl-item pl-item--box"></rect>
+  </g>
+
+  <!-- B · Prateleira com fita de borda -->
+  <g data-part="edge" class="pl-part">
+    <rect x="236" y="270" width="278" height="9" class="pl-shelf"></rect>
+    <line x1="236" y1="279" x2="514" y2="279" class="pl-edge"></line>
+    <path d="M452 279 C 470 281, 486 290, 498 304" class="pl-peel"></path>
+    <rect x="236" y="262" width="278" height="24" class="pl-hit"></rect>
+  </g>
+  <rect x="236" y="394" width="278" height="8" class="pl-shelf"></rect>
+
+  <!-- B · Gavetas -->
+  <g class="pl-part pl-drawer1">
+    <rect x="236" y="406" width="278" height="60" class="pl-panel"></rect>
+    <rect x="345" y="432" width="60" height="5" class="pl-handle"></rect>
+  </g>
+  <g data-part="drawer" class="pl-part pl-drawer2">
+    <rect x="236" y="470" width="278" height="60" class="pl-panel"></rect>
+    <rect x="345" y="496" width="60" height="5" class="pl-handle"></rect>
+    <line x1="236" y1="500" x2="514" y2="500" class="pl-only-line pl-axis"></line>
+    <rect x="236" y="470" width="278" height="60" class="pl-hit"></rect>
+  </g>
+  <g class="pl-part pl-drawer3">
+    <rect x="236" y="534" width="278" height="60" class="pl-panel"></rect>
+    <g data-part="handle" class="pl-part">
+      <rect x="345" y="560" width="30" height="5" class="pl-handle"></rect>
+      <rect x="375" y="560" width="30" height="5" class="pl-handle pl-break"></rect>
+      <rect x="330" y="548" width="90" height="30" class="pl-hit"></rect>
+    </g>
+  </g>
+
+  <!-- C · Portas de correr -->
+  <rect x="520" y="40" width="240" height="10" class="pl-track"></rect>
+  <g data-part="sliding" class="pl-part">
+    <g class="pl-slideB">
+      <rect x="638" y="52" width="118" height="542" class="pl-panel pl-panel--back"></rect>
+      <line x1="646" y1="240" x2="646" y2="400" class="pl-handle-line"></line>
+    </g>
+    <g class="pl-slideA">
+      <rect x="524" y="52" width="124" height="542" class="pl-panel"></rect>
+      <rect x="524" y="52" width="124" height="542" fill={`url(#shade-${uid})`} class="pl-shade"></rect>
+      <line x1="640" y1="240" x2="640" y2="400" class="pl-handle-line"></line>
+    </g>
+    <path d="M560 616 h60 m-10 -6 l10 6 l-10 6" class="pl-only-line pl-arrow"></path>
+    <rect x="524" y="46" width="232" height="550" class="pl-hit"></rect>
+  </g>
+
+  {dims && (
+    <g class="pl-dims">
+      <line x1="40" y1="18" x2="760" y2="18"></line>
+      <line x1="40" y1="10" x2="40" y2="26"></line>
+      <line x1="230" y1="12" x2="230" y2="24"></line>
+      <line x1="520" y1="12" x2="520" y2="24"></line>
+      <line x1="760" y1="10" x2="760" y2="26"></line>
+      <text x="135" y="13" text-anchor="middle">A</text>
+      <text x="375" y="13" text-anchor="middle">B</text>
+      <text x="640" y="13" text-anchor="middle">C</text>
+      <line x1="18" y1="40" x2="18" y2="625"></line>
+      <line x1="10" y1="40" x2="26" y2="40"></line>
+      <line x1="10" y1="625" x2="26" y2="625"></line>
+    </g>
+  )}
+</svg>
+
+<style is:global>
+  .pl {
+    --pl-stroke: var(--navy);
+    --pl-body: #f8fbfe;
+    --pl-panel: #f1f4f9;
+    --pl-panel-back: #e3e8f1;
+    --pl-niche: #cfd6e3;
+    --pl-item: #9aa3ba;
+    --pl-item-alt: #b8bfd0;
+    --pl-hand: var(--navy);
+    --sw: 1.4;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .pl * { vector-effect: non-scaling-stroke; }
+  .pl rect, .pl path, .pl circle, .pl line { stroke: var(--pl-stroke); stroke-width: var(--sw); }
+
+  .pl-carcass { fill: var(--pl-body); stroke-width: 2 !important; }
+  .pl-plinth { fill: var(--pl-panel-back); }
+  .pl-panel { fill: var(--pl-panel); }
+  .pl-panel--back { fill: var(--pl-panel-back); }
+  .pl-niche { fill: var(--pl-niche); }
+  .pl-shelf { fill: var(--pl-body); }
+  .pl-track { fill: var(--pl-panel-back); }
+  .pl-handle { fill: var(--pl-hand); }
+  .pl-handle-line { stroke-width: 3 !important; stroke-linecap: round; }
+  .pl-item { fill: var(--pl-item); stroke: none !important; }
+  .pl-item--alt { fill: var(--pl-item-alt); }
+  .pl-item--box { fill: #e9edf4; stroke: var(--pl-stroke) !important; }
+  .pl-shade { stroke: none !important; }
+  .pl-floor { stroke-width: 2 !important; }
+  .pl-hatch { stroke: none !important; }
+  .pl-hatch-line { stroke: var(--pl-stroke); stroke-width: 1; opacity: 0.35; }
+  .pl-edge { stroke-width: 2.2 !important; }
+  .pl-peel { fill: none; stroke-width: 2.2 !important; opacity: 0; }
+  .pl-led, .pl-led-strip { opacity: 0; stroke: none !important; }
+  .pl-led-strip { stroke: #f5ee0a !important; stroke-width: 3 !important; }
+  .pl-only-line { opacity: 0; fill: none; }
+  .pl-only-line circle { fill: none; }
+  .pl-swing { stroke-dasharray: 6 6; fill: none; }
+  .pl-axis { stroke-dasharray: 2 6; }
+  .pl-hit { fill: #f5ee0a; fill-opacity: 0; stroke: none !important; transition: fill-opacity 0.4s var(--ease-out); }
+  .pl-dims line { stroke-width: 1 !important; }
+  .pl-dims text { font: 700 11px var(--sans); letter-spacing: 0.18em; fill: var(--pl-stroke); stroke: none; }
+
+  .pl-part, .pl-part > *, .pl-slideA, .pl-slideB {
+    transform-box: fill-box;
+    transition: transform 0.9s var(--ease-out), opacity 0.6s, fill 0.6s;
+  }
+  .pl-break { transform-box: fill-box; transform-origin: 0 50%; transition: transform 0.9s var(--ease-out); }
+  .pl rect, .pl path { transition: fill 0.7s var(--ease-out), stroke 0.7s var(--ease-out), opacity 0.6s; }
+
+  /* ---------- LINE: projeto ---------- */
+  .pl--line { --pl-stroke: currentColor; }
+  .pl--line .pl-carcass,
+  .pl--line .pl-panel,
+  .pl--line .pl-niche,
+  .pl--line .pl-shelf,
+  .pl--line .pl-track,
+  .pl--line .pl-plinth,
+  .pl--line .pl-item--box { fill: transparent; }
+  .pl--line .pl-handle { fill: transparent; }
+  .pl--line .pl-item { fill: transparent; stroke: currentColor !important; stroke-width: 0.8 !important; opacity: 0.5; }
+  .pl--line .pl-shade { opacity: 0; }
+  .pl--line .pl-only-line { opacity: 0.55; }
+  .pl--line .pl-dims { opacity: 0.8; }
+
+  /* ---------- WORN: antes ---------- */
+  .pl--worn {
+    --pl-body: #e6e3dc;
+    --pl-panel: #dcd8cf;
+    --pl-panel-back: #cbc6bb;
+    --pl-niche: #b9b4aa;
+    --pl-item: #a39d92;
+    --pl-item-alt: #8f897e;
+    --pl-hand: #4b4f5f;
+    --pl-stroke: #3a3f52;
+  }
+  .pl--worn .pl-door { transform: rotate(1.8deg) translate(2px, 6px); transform-origin: 0 0; }
+  .pl--worn .pl-bascA { transform: rotate(5deg) translateY(6px); transform-origin: 0 0; }
+  .pl--worn .pl-drawer2 { transform: rotate(-1.4deg) translate(-4px, 3px); transform-origin: 100% 0; }
+  .pl--worn .pl-break { transform: translate(2px, 4px) rotate(38deg); }
+  .pl--worn .pl-peel { opacity: 1; }
+  .pl--worn .pl-slideB { transform: translateY(9px) rotate(0.8deg); transform-origin: 0 0; }
+  .pl--worn .pl-slideA { transform: translateY(4px); }
+
+  /* ---------- NEW: depois ---------- */
+  .pl--new {
+    --pl-panel: #f8fbfe;
+    --pl-niche: #1b2754;
+    --pl-item: #f8fbfe;
+    --pl-item-alt: #c9d3ea;
+  }
+  .pl--new .pl-item--box { fill: #f5ee0a; stroke: none !important; }
+  .pl--new .pl-led, .pl--new .pl-led-strip { opacity: 1; }
+  .pl--new .pl-edge { stroke: #0e183b; }
+
+  /* ---------- Destaque do diagnóstico ---------- */
+  .pl [data-part].is-hot > .pl-hit,
+  .pl [data-part].is-hot .pl-hit { fill-opacity: 0.38; }
+  .pl [data-part].is-picked > .pl-hit { fill-opacity: 0.22; }
+</style>

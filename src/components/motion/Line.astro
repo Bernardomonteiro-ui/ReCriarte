@@ -1,0 +1,6 @@
+---
+/** Uma linha de título com máscara — usada por [data-split]. */
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+<span class:list={['line-mask', cls]}><span class="line-inner"><slot /></span></span>

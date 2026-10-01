@@ -1,0 +1,222 @@
+---
+/**
+ * Desenhos técnicos de apoio. Usam currentColor + acento amarelo (.dw-acc),
+ * então funcionam em fundo claro e escuro.
+ * São a direção de arte enquanto as fotos reais não chegam — e continuam
+ * úteis depois, como camada de "projeto" sobre as fotos.
+ */
+import type { DrawingName } from '@/utils/types';
+
+interface Props { name: DrawingName; class?: string; title?: string }
+const { name, class: cls = '', title } = Astro.props;
+
+const titles: Record<DrawingName, string> = {
+  hinge: 'Detalhe técnico de dobradiça com regulagens',
+  slide: 'Corrediça telescópica de gaveta em vista lateral',
+  piston: 'Corte de armário aéreo com porta basculante e pistão',
+  kitchen: 'Elevação de cozinha planejada',
+  closet: 'Interior de closet planejado',
+  exploded: 'Módulo planejado em vista explodida para montagem',
+  custom: 'Peça sob medida integrada a um móvel existente',
+  bedroom: 'Elevação de dormitório planejado',
+  handle: 'Detalhe de puxador e fixação',
+  edge: 'Detalhe de fita de borda em chapa de MDF',
+};
+---
+
+<svg class:list={['dw', cls]} viewBox="0 0 600 450" role="img" aria-label={title ?? titles[name]} fill="none">
+  {name === 'hinge' && (
+    <g>
+      <rect x="70" y="80" width="190" height="290" class="dw-fill" />
+      <text x="80" y="100" class="dw-t">PORTA</text>
+      <circle cx="190" cy="225" r="46" />
+      <circle cx="190" cy="225" r="34" class="dw-thin" />
+      <circle cx="160" cy="185" r="5" /><circle cx="160" cy="265" r="5" />
+      <rect x="190" y="205" width="200" height="40" class="dw-fill2" />
+      <rect x="390" y="180" width="70" height="90" />
+      <circle cx="425" cy="200" r="6" /><circle cx="425" cy="250" r="6" />
+      <circle cx="320" cy="225" r="9" class="dw-acc-s" /><path d="M314 225h12M320 219v12" class="dw-acc-s" />
+      <circle cx="365" cy="225" r="9" class="dw-acc-s" /><path d="M359 225h12" class="dw-acc-s" />
+      <rect x="460" y="150" width="70" height="150" class="dw-fill" />
+      <text x="470" y="140" class="dw-t">LATERAL</text>
+      <path d="M320 150v-40M320 110l-6 10M320 110l6 10" class="dw-acc-s" />
+      <text x="300" y="98" class="dw-t dw-acc-t">ALTURA</text>
+      <path d="M365 300h50M415 300l-10 -6M415 300l-10 6M365 300l10 -6M365 300l10 6" class="dw-acc-s" />
+      <text x="356" y="326" class="dw-t dw-acc-t">LATERAL / PROFUNDIDADE</text>
+      <path d="M190 225 L120 400" class="dw-thin" /><text x="70" y="418" class="dw-t">CANECO Ø35</text>
+      <rect x="0" y="0" width="600" height="450" class="dw-none" />
+    </g>
+  )}
+
+  {name === 'slide' && (
+    <g>
+      <path d="M90 120h420v130H90z" class="dw-dash" />
+      <text x="96" y="110" class="dw-t">GAVETA</text>
+      <rect x="60" y="270" width="320" height="26" class="dw-fill" />
+      <rect x="120" y="276" width="320" height="18" class="dw-fill2" />
+      <rect x="200" y="280" width="320" height="10" class="dw-acc-f" />
+      {[140,170,200,230,260,290,320,350,380,410].map((x) => <circle cx={x} cy="285" r="3" class="dw-dot" />)}
+      <path d="M60 330h460" class="dw-thin" />
+      <path d="M60 322v16M380 322v16M520 322v16" class="dw-thin" />
+      <text x="190" y="356" class="dw-t">FIXA</text>
+      <text x="420" y="356" class="dw-t dw-acc-t">EXTENSÃO</text>
+      <path d="M440 200h70M510 200l-10 -6M510 200l-10 6" class="dw-acc-s" />
+      <circle cx="90" cy="283" r="5" /><circle cx="350" cy="283" r="5" />
+      <text x="60" y="400" class="dw-t">CORREDIÇA TELESCÓPICA · VISTA LATERAL</text>
+    </g>
+  )}
+
+  {name === 'piston' && (
+    <g>
+      <path d="M140 70h300v220H140z" class="dw-fill" />
+      <path d="M150 80h280v200H150z" class="dw-thin" />
+      <path d="M150 180h280" class="dw-thin" />
+      <path d="M440 70 L548 20 L556 34 L446 82 z" class="dw-fill2" />
+      <path d="M420 250 L500 70" class="dw-acc-s dw-wide" />
+      <circle cx="420" cy="250" r="7" class="dw-acc-f" /><circle cx="500" cy="70" r="7" class="dw-acc-f" />
+      <path d="M440 70 A 100 100 0 0 0 440 170" class="dw-dash" />
+      <text x="456" y="140" class="dw-t">110°</text>
+      <path d="M100 70v220M92 70h16M92 290h16" class="dw-thin" />
+      <text x="140" y="330" class="dw-t">ARMÁRIO AÉREO · CORTE</text>
+      <text x="300" y="360" class="dw-t dw-acc-t">PISTÃO A GÁS</text>
+      <path d="M380 352 L455 165" class="dw-thin" />
+    </g>
+  )}
+
+  {name === 'kitchen' && (
+    <g>
+      <path d="M20 400h560" class="dw-strong" />
+      <path d="M40 60h360v110H40z" class="dw-fill" />
+      <path d="M130 60v110M220 60v110M310 60v110" />
+      <path d="M40 60h180v110" class="dw-none" />
+      <path d="M232 92 h66 M232 104 h66" class="dw-thin" />
+      <path d="M400 40h140v360H400z" class="dw-fill" />
+      <path d="M400 170h140M400 280h140" />
+      <rect x="418" y="190" width="104" height="70" class="dw-fill2" />
+      <path d="M430 160 h80" class="dw-acc-s dw-wide" />
+      <path d="M40 252h360v8H40z" class="dw-fill2" />
+      <path d="M40 260h360v130H40z" class="dw-fill" />
+      <path d="M150 260v130M290 260v130M150 303h140M150 346h140" />
+      <path d="M200 280h40M200 323h40M200 366h40" class="dw-acc-s dw-wide" />
+      <path d="M70 290v60M120 290v60" />
+      <path d="M310 252 q30 -26 60 0" class="dw-thin" />
+      <path d="M340 230v22" class="dw-thin" />
+      <path d="M40 390h500" class="dw-thin" />
+      <path d="M60 200 q20 -10 40 0 v52 h-40z" class="dw-thin" />
+    </g>
+  )}
+
+  {name === 'closet' && (
+    <g>
+      <path d="M40 40h520v370H40z" class="dw-fill" />
+      <path d="M210 40v370M390 40v370" />
+      <path d="M40 100h520" />
+      <path d="M60 130h130" class="dw-acc-s dw-wide" />
+      {[72,92,112,132,152,172].map((x) => <path d={`M${x} 130 v8 l-14 26 h28 z`} class="dw-thin" />)}
+      {[72,92,112,132,152,172].map((x, i) => <path d={`M${x - 12} 164 v${120 + (i % 3) * 30}`} class="dw-thin" />)}
+      <path d="M210 180h180M210 250h180M210 320h180" />
+      <path d="M230 160h40v20h-40zM290 150h40v30h-40zM340 166h34v14h-34z" class="dw-fill2" />
+      <path d="M390 300h170M390 355h170" />
+      <path d="M455 325h40M455 380h40" class="dw-acc-s dw-wide" />
+      <path d="M400 270 l30 -14 l30 14 M470 270 l30 -14 l30 14" class="dw-thin" />
+      <path d="M410 150h130M410 200h130" class="dw-thin" />
+      <path d="M20 410h560" class="dw-strong" />
+    </g>
+  )}
+
+  {name === 'exploded' && (
+    <g>
+      <path d="M200 140 l120 -60 l160 80 l-120 60 z" class="dw-fill2" />
+      <path d="M190 190 v170 l120 60 v-170 z" class="dw-fill" />
+      <path d="M340 230 v170 l160 -80 v-170 z" class="dw-fill" transform="translate(30 -10)" />
+      <path d="M150 220 l120 -60 v170 l-120 60z" class="dw-dash" />
+      <path d="M255 115 v-40M255 75l-6 10M255 75l6 10" class="dw-acc-s" />
+      <path d="M160 300 h-50M110 300l10 -6M110 300l10 6" class="dw-acc-s" />
+      <path d="M520 300 h40M560 300l-10 -6M560 300l-10 6" class="dw-acc-s" />
+      <circle cx="210" cy="215" r="4" class="dw-dot" /><circle cx="290" cy="255" r="4" class="dw-dot" />
+      <circle cx="210" cy="330" r="4" class="dw-dot" /><circle cx="290" cy="370" r="4" class="dw-dot" />
+      <text x="40" y="420" class="dw-t">DESMONTAGEM · TRANSPORTE · REMONTAGEM</text>
+      <text x="400" y="80" class="dw-t dw-acc-t">TAMPO</text>
+      <text x="40" y="270" class="dw-t">LATERAL</text>
+    </g>
+  )}
+
+  {name === 'custom' && (
+    <g>
+      <path d="M60 60h200v320H60z" class="dw-fill" />
+      <path d="M60 170h200M60 280h200M160 60v320" class="dw-thin" />
+      <path d="M260 60h220v320H260z" class="dw-dash" />
+      <path d="M270 70h200v100H270z" class="dw-acc-f dw-acc-op" />
+      <path d="M270 70h200v100H270z" class="dw-acc-s" />
+      <path d="M270 190h200M270 260h200M370 190v180" />
+      <path d="M260 40h220M260 32v16M480 32v16" class="dw-thin" />
+      <text x="340" y="28" class="dw-t">EXISTENTE + NOVO</text>
+      <path d="M500 60v320M492 60h16M492 380h16" class="dw-thin" />
+      <path d="M20 380h560" class="dw-strong" />
+      <text x="290" y="125" class="dw-t">NOVO MÓDULO</text>
+      <text x="70" y="410" class="dw-t">PEÇA COMPLEMENTAR · MESMO PADRÃO</text>
+    </g>
+  )}
+
+  {name === 'bedroom' && (
+    <g>
+      <path d="M20 400h560" class="dw-strong" />
+      <path d="M330 40h230v360H330z" class="dw-fill" />
+      <path d="M445 40v360M330 330h230" />
+      <path d="M432 170v80M458 170v80" class="dw-acc-s dw-wide" />
+      <path d="M40 150h270v40H40z" class="dw-fill2" />
+      <path d="M60 190h230v130H60z" />
+      <path d="M50 320h250v40H50z" class="dw-fill" />
+      <path d="M80 270 q30 -20 70 0 M170 270 q30 -20 70 0" class="dw-thin" />
+      <path d="M20 280h40v80H20zM300 280h30v80h-30z" class="dw-fill" />
+      <path d="M60 140 h230" class="dw-acc-s" />
+      <path d="M330 365 h230" class="dw-thin" />
+    </g>
+  )}
+
+  {name === 'handle' && (
+    <g>
+      <path d="M60 90h480v270H60z" class="dw-fill" />
+      <path d="M180 200h240v30H180z" class="dw-fill2" />
+      <path d="M200 230v40M400 230v40" class="dw-dash" />
+      <circle cx="200" cy="280" r="10" class="dw-acc-s" /><circle cx="400" cy="280" r="10" class="dw-acc-s" />
+      <path d="M200 320h200M200 312v16M400 312v16" class="dw-thin" />
+      <text x="250" y="346" class="dw-t dw-acc-t">ENTRE FUROS</text>
+      <text x="70" y="80" class="dw-t">FRENTE DE GAVETA</text>
+    </g>
+  )}
+
+  {name === 'edge' && (
+    <g>
+      <path d="M80 160 l300 -60 l140 70 l-300 60 z" class="dw-fill" />
+      <path d="M80 160 v40 l140 70 v-40" class="dw-fill2" />
+      <path d="M220 230 v40 l300 -60 v-40" class="dw-fill2" />
+      <path d="M220 236 l300 -60" class="dw-acc-s dw-wide" />
+      <path d="M440 200 C 470 200, 500 230, 520 270" class="dw-acc-s dw-wide" />
+      <text x="420" y="310" class="dw-t dw-acc-t">FITA DE BORDA</text>
+      <text x="90" y="320" class="dw-t">CHAPA MDF · CORTE</text>
+    </g>
+  )}
+</svg>
+
+<style is:global>
+  .dw { width: 100%; height: 100%; color: inherit; }
+  .dw * { vector-effect: non-scaling-stroke; }
+  .dw path, .dw rect, .dw circle { stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
+  .dw .dw-thin { stroke-width: 0.9; opacity: 0.7; }
+  .dw .dw-strong { stroke-width: 2.2; }
+  .dw .dw-dash { stroke-dasharray: 5 6; opacity: 0.7; }
+  .dw .dw-fill { fill: currentColor; fill-opacity: 0.05; }
+  .dw .dw-fill2 { fill: currentColor; fill-opacity: 0.12; }
+  .dw .dw-none { stroke: none; }
+  .dw .dw-acc-s { stroke: var(--yellow); }
+  .dw .dw-acc-f { fill: var(--yellow); stroke: none; }
+  .dw .dw-acc-op { fill-opacity: 0.22; }
+  .dw .dw-wide { stroke-width: 3.2; }
+  .dw .dw-dot { fill: currentColor; stroke: none; }
+  .dw .dw-t { font: 700 10px var(--sans); letter-spacing: 0.2em; fill: currentColor; stroke: none; opacity: 0.75; }
+  .dw .dw-acc-t { fill: var(--yellow); opacity: 1; }
+  /* Em fundo claro o amarelo puro some — escurecemos o traço de acento */
+  .on-light .dw .dw-acc-s { stroke: #c9c200; }
+  .on-light .dw .dw-acc-t { fill: #8f8a00; }
+</style>

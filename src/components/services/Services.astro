@@ -1,0 +1,150 @@
+---
+import Frame from '@/components/ui/Frame.astro';
+import Line from '@/components/motion/Line.astro';
+import { services } from '@/data/services';
+---
+
+<section class="sv section" id="servicos" aria-labelledby="sv-title" data-services>
+  <div class="container">
+    <header class="sv-head">
+      <p class="eyebrow" data-reveal>04 — Serviços</p>
+      <h2 id="sv-title" class="sv-title" data-split>
+        <Line>Um cuidado para</Line>
+        <Line>cada <span class="serif">necessidade.</span></Line>
+      </h2>
+    </header>
+
+    <div class="sv-grid">
+      <ol class="sv-list" role="list">
+        {services.map((s, i) => (
+          <li class:list={['sv-item', { 'is-active': i === 0 }]} data-sv-item={i}>
+            <h3 class="sv-h">
+              <button type="button" class="sv-btn" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`sv-p-${s.id}`} id={`sv-b-${s.id}`}>
+                <span class="sv-num">{s.num}</span>
+                <span class="sv-name">{s.title}</span>
+                <span class="sv-plus" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="sv-panel" id={`sv-p-${s.id}`} role="region" aria-labelledby={`sv-b-${s.id}`}>
+              <div class="sv-panel-in">
+                <p class="sv-accent serif">— {s.accent}.</p>
+                <p class="sv-sum">{s.summary}</p>
+                <ul class="sv-items" role="list">{s.items.map((t) => <li>{t}</li>)}</ul>
+                <div class="sv-m-img">
+                  <Frame photo={s.photo} alt={s.imageAlt} art={s.art} tone={i % 2 ? 'navy' : 'mist'} ratio="4/3" refCode={`${s.num} — ${s.title}`} />
+                </div>
+                <a href={s.href} class="link-line">Ver {s.title.toLowerCase()} <span class="arrow" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="sv-media" aria-hidden="true">
+        <div class="sv-media-in" data-reveal="clip">
+          {services.map((s, i) => (
+            <div class:list={['sv-slide', { 'is-active': i === 0 }]} data-sv-slide={i}>
+              <Frame photo={s.photo} alt={s.imageAlt} art={s.art} tone={i % 2 ? 'navy' : 'mist'} refCode={`${s.num} / 04`} caption={s.title} sizes="(min-width: 1000px) 45vw, 100vw" />
+            </div>
+          ))}
+          <span class="sv-progress" data-sv-progress></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sv-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(40px, 6vw, 96px); }
+  .sv-head .eyebrow { padding-top: 1.2em; }
+  .sv-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+  .sv-title .serif { font-weight: 400; }
+
+  .sv-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
+
+  .sv-list { border-top: 1px solid var(--line-strong); }
+  .sv-item { border-bottom: 1px solid var(--line-strong); }
+  .sv-btn {
+    width: 100%; text-align: left;
+    display: grid; grid-template-columns: 52px 1fr 28px; align-items: center; gap: 12px;
+    padding: clamp(20px, 2.4vw, 32px) 0;
+  }
+  .sv-num { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.14em; color: var(--gray); align-self: start; padding-top: 0.9em; }
+  .sv-name {
+    font-size: var(--fs-2xl); font-weight: 800; letter-spacing: -0.045em; line-height: 1;
+    transition: transform 0.6s var(--ease-out), color 0.4s;
+  }
+  .sv-item.is-active .sv-name { transform: translateX(14px); }
+  .sv-item.is-active .sv-num { color: var(--navy); }
+  .sv-plus { position: relative; width: 20px; height: 20px; justify-self: end; }
+  .sv-plus::before, .sv-plus::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: currentColor; transition: transform 0.5s var(--ease-out); }
+  .sv-plus::after { transform: rotate(90deg); }
+  .sv-item.is-active .sv-plus::after { transform: rotate(0); }
+
+  .sv-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s var(--ease-out); }
+  .sv-item.is-active .sv-panel { grid-template-rows: 1fr; }
+  .sv-panel-in { overflow: hidden; padding-left: 64px; display: grid; gap: 16px; align-content: start; }
+  .sv-item.is-active .sv-panel-in { padding-bottom: 32px; }
+  .sv-accent { font-size: var(--fs-lg); color: var(--ink-soft); }
+  .sv-sum { max-width: 50ch; color: var(--ink-soft); }
+  .sv-items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sv-items li { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 12px; background: var(--mist); }
+  .sv-panel-in .link-line { justify-self: start; }
+  .sv-m-img { display: none; }
+
+  .sv-media { position: sticky; top: 100px; }
+  .sv-media-in { position: relative; aspect-ratio: 4 / 5; max-height: 78svh; width: 100%; }
+  .sv-slide { position: absolute; inset: 0; clip-path: inset(0 0 100% 0); transition: clip-path 1s var(--ease-in-out); }
+  .sv-slide.is-active { clip-path: inset(0 0 0% 0); z-index: 2; }
+  .sv-slide.was-active { z-index: 1; clip-path: inset(0 0 0 0); }
+  .sv-slide :global(.frame) { width: 100%; height: 100%; }
+  .sv-slide :global(.frame .pl), .sv-slide :global(.frame .dw) { transform: scale(1.08); transition: transform 1.6s var(--ease-out); }
+  .sv-slide.is-active :global(.frame .pl), .sv-slide.is-active :global(.frame .dw) { transform: scale(1); }
+  .sv-progress { position: absolute; left: 0; bottom: -14px; height: 3px; width: 25%; background: var(--yellow); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform 0.8s var(--ease-out); }
+
+  @media (max-width: 1000px) {
+    .sv-head, .sv-grid { grid-template-columns: 1fr; }
+    .sv-head .eyebrow { padding-top: 0; }
+    .sv-media { display: none; }
+    .sv-m-img { display: block; }
+    .sv-panel-in { padding-left: 0; }
+    .sv-btn { grid-template-columns: 40px 1fr 24px; }
+    .sv-item.is-active .sv-name { transform: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-services]');
+  if (root) {
+    const items = [...root.querySelectorAll<HTMLElement>('[data-sv-item]')];
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-sv-slide]')];
+    const progress = root.querySelector<HTMLElement>('[data-sv-progress]');
+    const desktop = window.matchMedia('(hover: hover) and (min-width: 1001px)');
+    let current = 0;
+
+    const activate = (i: number, toggle = false) => {
+      if (i === current && !toggle) return;
+      const closing = toggle && i === current && items[i].classList.contains('is-active');
+      items.forEach((it, k) => {
+        const on = k === i && !closing;
+        it.classList.toggle('is-active', on);
+        it.querySelector('.sv-btn')?.setAttribute('aria-expanded', String(on));
+      });
+      if (!closing) {
+        slides.forEach((s, k) => {
+          s.classList.toggle('was-active', k === current && k !== i);
+          s.classList.toggle('is-active', k === i);
+        });
+        progress?.style.setProperty('--i', String(i));
+        current = i;
+      }
+    };
+
+    items.forEach((it, i) => {
+      const btn = it.querySelector<HTMLButtonElement>('.sv-btn')!;
+      btn.addEventListener('click', () => activate(i, !desktop.matches));
+      it.addEventListener('pointerenter', () => { if (desktop.matches) activate(i); });
+      btn.addEventListener('focus', () => { if (desktop.matches) activate(i); });
+    });
+  }
+</script>

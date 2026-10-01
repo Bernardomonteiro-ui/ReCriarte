@@ -1,0 +1,39 @@
+---
+import { services, type Service } from '@/data/services';
+interface Props { current?: Service['id']; title?: string }
+const { current, title = 'Outros cuidados para o seu móvel' } = Astro.props;
+const list = services.filter((s) => s.id !== current);
+---
+
+<section class="rs section" aria-labelledby="rs-title">
+  <div class="container">
+    <h2 id="rs-title" class="tech rs-k" data-reveal>{title}</h2>
+    <ul class="rs-list" role="list">
+      {list.map((s) => (
+        <li data-reveal>
+          <a href={s.href} class="rs-link">
+            <span class="index-num">{s.num}</span>
+            <span class="rs-name">{s.title}</span>
+            <span class="rs-acc serif">{s.accent}</span>
+            <span class="rs-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rs { padding-block: clamp(64px, 8vw, 120px); }
+  .rs-k { color: var(--gray); margin-bottom: 24px; }
+  .rs-list { border-top: 1px solid var(--line-strong); }
+  .rs-list li { border-bottom: 1px solid var(--line-strong); }
+  .rs-link { display: grid; grid-template-columns: 52px auto 1fr auto; align-items: baseline; gap: 20px; padding: 24px 0; }
+  .rs-name { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.04em; transition: transform 0.5s var(--ease-out); }
+  .rs-acc { color: var(--gray); font-size: var(--fs-lg); opacity: 0; transform: translateX(-12px); transition: opacity 0.4s, transform 0.5s var(--ease-out); }
+  .rs-arrow { font-size: var(--fs-lg); transition: transform 0.5s var(--ease-out); }
+  .rs-link:hover .rs-name { transform: translateX(8px); }
+  .rs-link:hover .rs-acc, .rs-link:focus-visible .rs-acc { opacity: 1; transform: none; }
+  .rs-link:hover .rs-arrow { transform: translateX(6px); }
+  @media (max-width: 700px) { .rs-link { grid-template-columns: 40px 1fr auto; } .rs-acc { display: none; } }
+</style>

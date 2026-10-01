@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/hero/Hero.astro';
+import Transition from '@/components/sections/Transition.astro';
+import Manifesto from '@/components/sections/Manifesto.astro';
+import Diagnostic from '@/components/diagnostic/Diagnostic.astro';
+import Services from '@/components/services/Services.astro';
+import Recriar from '@/components/sections/Recriar.astro';
+import Transformacao from '@/components/sections/Transformacao.astro';
+import ProjetoExecucaoSection from '@/components/sections/ProjetoExecucaoSection.astro';
+import Portfolio from '@/components/portfolio/Portfolio.astro';
+import Process from '@/components/process/Process.astro';
+import Reviews from '@/components/testimonials/Reviews.astro';
+import Team from '@/components/team/Team.astro';
+import B2B from '@/components/b2b/B2B.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { faq } from '@/utils/schema';
+import { homeFaq } from '@/data/faq';
+---
+
+<BaseLayout
+  title="Manutenção de móveis planejados em Londrina | ReCriarte"
+  description="Seu planejado não precisa ser trocado. A ReCriarte faz manutenção, adaptação, montagem e peças sob medida para móveis planejados em Londrina — PR. Mande uma foto pelo WhatsApp."
+  schema={[faq(homeFaq)]}
+>
+  <Hero />
+  <Transition />
+  <Manifesto />
+  <Diagnostic />
+  <Services />
+  <Recriar />
+  <Transformacao />
+  <ProjetoExecucaoSection />
+  <Portfolio />
+  <Process />
+  <Reviews />
+  <Team />
+  <B2B />
+  <FinalCta secondaryHref="#diagnostico" />
+</BaseLayout>

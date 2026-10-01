@@ -1,0 +1,69 @@
+---
+/**
+ * Hero das páginas internas. O H1 vem pelo slot "title" (permite <span class="serif">).
+ */
+import Breadcrumbs, { type Crumb } from '@/components/layout/Breadcrumbs.astro';
+import Frame from '@/components/ui/Frame.astro';
+import type { Art } from '@/utils/types';
+
+interface Props {
+  crumbs: Crumb[];
+  eyebrow: string;
+  lead: string;
+  photo?: string;
+  art?: Art;
+  imageAlt?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  ctaExternal?: boolean;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  tone?: 'light' | 'navy';
+  refCode?: string;
+}
+const {
+  crumbs, eyebrow, lead, photo, art = { kind: 'planejado', mode: 'solid' }, imageAlt = '',
+  ctaLabel, ctaHref, ctaExternal = true, secondaryLabel, secondaryHref, tone = 'light', refCode,
+} = Astro.props;
+---
+
+<section class:list={['ph', `ph--${tone}`]} data-theme={tone === 'navy' ? 'navy' : undefined} aria-labelledby="ph-title">
+  <div class="container ph-in">
+    <div class="ph-copy">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h1 id="ph-title" class="ph-title" data-split><slot name="title" /></h1>
+      <p class="lead" data-reveal data-delay="0.15">{lead}</p>
+      {(ctaLabel || secondaryLabel) && (
+        <div class="ph-ctas" data-reveal data-delay="0.25">
+          {ctaLabel && ctaHref && (
+            <a href={ctaHref} class="btn" target={ctaExternal ? '_blank' : undefined} rel={ctaExternal ? 'noopener' : undefined} data-wa={ctaExternal ? 'page-hero' : undefined}>
+              {ctaLabel} <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          )}
+          {secondaryLabel && secondaryHref && <a href={secondaryHref} class="btn btn--ghost">{secondaryLabel}</a>}
+        </div>
+      )}
+      <slot name="after" />
+    </div>
+    <div class="ph-art" data-reveal="clip">
+      <Frame photo={photo} alt={imageAlt} art={art} tone={tone === 'navy' ? 'deep' : 'navy'} ratio="4/4.4" refCode={refCode} eager sizes="(min-width: 900px) 50vw, 100vw" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .ph { padding: calc(var(--header-h) + clamp(32px, 5vw, 72px)) 0 clamp(64px, 8vw, 120px); position: relative; }
+  .ph--light::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, transparent calc(100% - 1px), var(--line) 0) 0 0 / calc(100% / 12) 100%;
+    opacity: 0.6;
+  }
+  .ph-in { position: relative; display: grid; grid-template-columns: minmax(0, 6.5fr) minmax(0, 5.5fr); gap: clamp(32px, 5vw, 88px); align-items: center; }
+  .ph-copy { display: grid; gap: 26px; justify-items: start; }
+  .ph-title { font-size: clamp(2.5rem, 1rem + 4vw, 5.4rem); letter-spacing: -0.05em; line-height: 0.98; }
+  .ph-title :global(.serif) { font-weight: 400; }
+  .ph-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .ph-art { width: 100%; }
+  @media (max-width: 900px) { .ph-in { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,48 @@
+---
+import Line from '@/components/motion/Line.astro';
+import Frame from '@/components/ui/Frame.astro';
+import { b2bAudiences } from '@/data/content';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+interface Props { showPageLink?: boolean }
+const { showPageLink = true } = Astro.props;
+---
+
+<section class="bb section" aria-labelledby="bb-title">
+  <div class="container bb-in">
+    <div class="bb-media" data-reveal="clip">
+      <Frame photo="b2b/parceiros.jpg" alt="Projeto de móvel planejado em continuidade" art={{ kind: 'drawing', name: 'kitchen' }} tone="navy" ratio="4/5" refCode="B2B" caption="Projeto · Continuidade" sizes="(min-width: 900px) 40vw, 100vw" />
+    </div>
+    <div class="bb-copy">
+      <p class="eyebrow" data-reveal>11 — Para empresas</p>
+      <h2 id="bb-title" class="bb-title" data-split>
+        <Line>Quando o projeto</Line>
+        <Line>precisa <span class="serif">continuar.</span></Line>
+      </h2>
+      <p class="lead" data-reveal>
+        Assistência, ajustes, montagem e adaptações para quem trabalha com móveis planejados — e precisa de um parceiro que cuide do que vem depois da entrega.
+      </p>
+      <ul class="bb-aud" role="list" data-reveal>
+        {b2bAudiences.map((a) => <li>{a}</li>)}
+      </ul>
+      <div class="bb-ctas" data-reveal>
+        <a href={whatsappUrl(messages.b2b)} class="btn" target="_blank" rel="noopener" data-wa="b2b">Falar com a ReCriarte <span class="arrow" aria-hidden="true">→</span></a>
+        {showPageLink && <a href="/empresas" class="link-line">Saiba mais <span class="arrow" aria-hidden="true">→</span></a>}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bb-in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 112px); align-items: center; }
+  .bb-copy { display: grid; gap: 28px; }
+  .bb-title { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .bb-title .serif { font-weight: 400; }
+  .bb-aud { display: flex; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--line-strong); }
+  .bb-aud li {
+    flex: 1 1 auto; padding: 16px 20px 16px 0; margin-right: 20px;
+    font-weight: 800; font-size: var(--fs-md); letter-spacing: -0.02em;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .bb-ctas { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  @media (max-width: 900px) { .bb-in { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,127 @@
+---
+/**
+ * Slot de imagem da ReCriarte.
+ * - Se `photo` existir em src/assets/photos → <picture> AVIF/WebP responsivo.
+ * - Se não → desenho técnico em prancheta (grid, marcas de corte, referência).
+ *   Nunca um retângulo cinza "imagem aqui".
+ */
+import { Picture } from 'astro:assets';
+import { getPhoto } from '@/utils/photos';
+import Planejado from '@/components/illustrations/Planejado.astro';
+import Drawing from '@/components/illustrations/Drawing.astro';
+import type { Art } from '@/utils/types';
+
+interface Props {
+  photo?: string | null;
+  alt: string;
+  art?: Art;
+  tone?: 'navy' | 'mist' | 'white' | 'deep';
+  refCode?: string;
+  caption?: string;
+  ratio?: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  /** Sem moldura técnica (para composições em camadas) */
+  bare?: boolean;
+  [key: `data-${string}`]: unknown;
+}
+
+const {
+  photo, alt, art = { kind: 'planejado', mode: 'solid' }, tone = 'mist',
+  refCode, caption, ratio, sizes = '(min-width: 1024px) 50vw, 100vw',
+  eager = false, class: cls = '', bare = false, ...rest
+} = Astro.props;
+
+const img = getPhoto(photo);
+const dark = tone === 'navy' || tone === 'deep';
+---
+
+<figure
+  class:list={['frame', `frame--${tone}`, { 'frame--photo': img, 'frame--bare': bare, 'on-light': !dark }, cls]}
+  style={ratio ? `aspect-ratio:${ratio}` : undefined}
+  {...rest}
+>
+  {img ? (
+    <Picture
+      src={img}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={[480, 800, 1200, 1600, 2000].filter((w) => w <= img.width)}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+      class="frame-media"
+    />
+  ) : (
+    <div class="frame-art" role="img" aria-label={alt}>
+      <div class="frame-grid" aria-hidden="true"></div>
+      <div class="frame-draw" data-frame-draw>
+        {art.kind === 'planejado'
+          ? <Planejado mode={art.mode ?? 'solid'} dims={art.dims} title={alt} />
+          : <Drawing name={art.name} title={alt} />}
+      </div>
+      {!bare && <span class="frame-corner frame-corner--tl" aria-hidden="true"></span>}
+      {!bare && <span class="frame-corner frame-corner--br" aria-hidden="true"></span>}
+    </div>
+  )}
+  {(refCode || caption) && (
+    <figcaption class="frame-cap">
+      {refCode && <span class="tech">{refCode}</span>}
+      {caption && <span class="tech frame-cap-txt">{caption}</span>}
+    </figcaption>
+  )}
+  <slot />
+</figure>
+
+<style is:global>
+  .frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--mist);
+    color: var(--navy);
+    isolation: isolate;
+  }
+  .frame--navy { background: var(--navy); color: var(--white); }
+  .frame--deep { background: var(--navy-900); color: var(--white); }
+  .frame--white { background: var(--white); }
+
+  .frame-media, .frame-media img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .frame picture { display: contents; }
+
+  .frame-art { position: absolute; inset: 0; display: grid; place-items: center; }
+  .frame-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.06;
+    mask-image: radial-gradient(120% 90% at 50% 50%, #000 40%, transparent 100%);
+  }
+  .frame-draw {
+    position: relative;
+    width: min(86%, 760px);
+    max-height: 84%;
+    display: grid; place-items: center;
+  }
+  .frame-draw > svg { max-height: 100%; width: 100%; }
+
+  .frame-corner { position: absolute; width: 18px; height: 18px; border: 0 solid currentColor; opacity: 0.45; }
+  .frame-corner--tl { left: 16px; top: 16px; border-left-width: 1.5px; border-top-width: 1.5px; }
+  .frame-corner--br { right: 16px; top: 16px; border-right-width: 1.5px; border-top-width: 1.5px; }
+
+  .frame-cap {
+    position: absolute; left: 20px; right: 20px; bottom: 18px;
+    display: flex; justify-content: space-between; gap: 12px;
+    pointer-events: none; z-index: 2;
+  }
+  .frame--photo .frame-cap { color: var(--white); text-shadow: 0 1px 12px rgb(8 15 39 / 0.6); }
+  .frame-cap-txt { opacity: 0.7; }
+  .frame--bare .frame-grid { opacity: 0.04; }
+</style>

@@ -1,0 +1,70 @@
+---
+import Line from '@/components/motion/Line.astro';
+import Frame from '@/components/ui/Frame.astro';
+import { team } from '@/data/content';
+import { getPhoto } from '@/utils/photos';
+---
+
+<section class="tm section" data-theme="mist" aria-labelledby="tm-title">
+  <div class="container">
+    <header class="tm-head">
+      <p class="eyebrow" data-reveal>10 — Equipe</p>
+      <h2 id="tm-title" class="tm-title" data-split>
+        <Line>Por trás de cada móvel,</Line>
+        <Line>tem gente que <span class="serif">cuida.</span></Line>
+      </h2>
+    </header>
+
+    <ul class="tm-grid" role="list">
+      {team.map((m, i) => (
+        <li class:list={['tm-person', { 'tm-person--offset': i % 2 === 1 }]}>
+          <div class="tm-photo" data-reveal="clip" data-delay={String(i * 0.15)}>
+            {getPhoto(m.photo) ? (
+              <Frame photo={m.photo} alt={`${m.name}, da equipe ReCriarte`} ratio="4/5" sizes="(min-width: 900px) 40vw, 100vw" />
+            ) : (
+              <div class="tm-mono" role="img" aria-label={`${m.name}, da equipe ReCriarte`}>
+                <span class="tm-mono-l serif" aria-hidden="true">{m.name.charAt(0)}</span>
+                <span class="tm-mono-grid" aria-hidden="true"></span>
+              </div>
+            )}
+          </div>
+          <div class="tm-meta">
+            <span class="index-num">0{i + 1}</span>
+            <h3 class="tm-name">{m.name}</h3>
+            {m.role && <p class="tech tm-role">{m.role}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tm-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(48px, 6vw, 96px); }
+  .tm-head .eyebrow { padding-top: 1.2em; }
+  .tm-title { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .tm-title .serif { font-weight: 400; }
+  .tm-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); }
+  .tm-person { grid-column: 2 / span 5; display: grid; gap: 20px; }
+  .tm-person--offset { grid-column: 8 / span 5; margin-top: 22%; }
+  .tm-mono {
+    position: relative; aspect-ratio: 4 / 5; overflow: hidden;
+    background: var(--navy); color: var(--white);
+    display: grid; place-items: center;
+  }
+  .tm-mono-l { font-size: clamp(10rem, 26vw, 24rem); line-height: 1; color: var(--yellow); position: relative; z-index: 1; translate: 0 -4%; }
+  .tm-mono-grid {
+    position: absolute; inset: 0; opacity: 0.08;
+    background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+  .tm-meta { display: flex; align-items: baseline; gap: 16px; border-top: 1px solid var(--line-strong); padding-top: 16px; }
+  .tm-name { font-size: var(--fs-2xl); letter-spacing: -0.05em; }
+  .tm-role { color: var(--gray); margin-left: auto; }
+  @media (max-width: 900px) {
+    .tm-head { grid-template-columns: 1fr; }
+    .tm-head .eyebrow { padding-top: 0; }
+    .tm-person { grid-column: 1 / span 10; }
+    .tm-person--offset { grid-column: 3 / span 10; margin-top: 0; }
+  }
+</style>

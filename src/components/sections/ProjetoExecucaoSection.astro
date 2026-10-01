@@ -1,0 +1,28 @@
+---
+import ProjetoExecucao from '@/components/before-after/ProjetoExecucao.astro';
+import Line from '@/components/motion/Line.astro';
+import { projects } from '@/data/portfolio';
+const p = projects.find((x) => x.projectExecution);
+---
+
+<section class="pxs section" data-theme="mist" aria-labelledby="pxs-title">
+  <div class="container">
+    <header class="pxs-head">
+      <h2 id="pxs-title" class="pxs-title" data-split>
+        <Line>O que foi <span class="serif">desenhado</span></Line>
+        <Line>é o que fica pronto.</Line>
+      </h2>
+      <p class="lead" data-reveal>Antes de mexer no seu móvel, a gente entende como ele foi feito. Medida, ferragem, acabamento — o projeto guia a execução.</p>
+    </header>
+  </div>
+  <div class="container pxs-wide">
+    <ProjetoExecucao project={p?.projectExecution?.project} execution={p?.projectExecution?.execution} />
+  </div>
+</section>
+
+<style>
+  .pxs-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; margin-bottom: clamp(32px, 4vw, 64px); }
+  .pxs-title { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .pxs-title .serif { font-weight: 400; }
+  @media (max-width: 900px) { .pxs-head { grid-template-columns: 1fr; } .pxs-wide { padding-inline: 0; } }
+</style>

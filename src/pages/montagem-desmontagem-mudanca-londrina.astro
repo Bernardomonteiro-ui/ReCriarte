@@ -1,0 +1,95 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import Frame from '@/components/ui/Frame.astro';
+import Process from '@/components/process/Process.astro';
+import Faq from '@/components/sections/Faq.astro';
+import RelatedServices from '@/components/sections/RelatedServices.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { movingFaq } from '@/data/faq';
+import { faq, service, breadcrumbs } from '@/utils/schema';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const path = '/montagem-desmontagem-mudanca-londrina';
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Montagem e mudança', href: path }];
+const description =
+  'Montagem e desmontagem de móveis planejados em Londrina. Vai mudar? A ReCriarte desmonta, remonta no novo endereço e adapta o móvel ao novo espaço.';
+
+// TODO(confirmar): a etapa de transporte só deve aparecer se a ReCriarte oferecer o transporte.
+const steps = [
+  { k: 'Desmontar', t: 'Peça por peça, com cuidado com ferragens, frentes e acabamento.', art: { kind: 'drawing', name: 'exploded' } as const, photo: 'montagem/desmontagem.jpg' },
+  { k: 'Organizar', t: 'Peças organizadas para a remontagem ser fiel ao original.', art: { kind: 'planejado', mode: 'line', dims: true } as const, photo: 'montagem/organizacao.jpg' },
+  { k: 'Remontar', t: 'No novo endereço, com nivelamento e regulagem de portas e gavetas.', art: { kind: 'planejado', mode: 'solid' } as const, photo: 'montagem/remontagem.jpg' },
+  { k: 'Adaptar', t: 'Se o novo espaço for diferente, o móvel é ajustado para caber e funcionar.', art: { kind: 'drawing', name: 'custom' } as const, photo: 'montagem/adaptacao.jpg' },
+];
+---
+
+<BaseLayout
+  title="Montagem, desmontagem e mudança de móveis planejados em Londrina"
+  description={description}
+  serviceId="montagem"
+  schema={[
+    service(site, { name: 'Montagem e desmontagem de móveis planejados', serviceType: 'Montagem, desmontagem e remontagem de móveis planejados', description, path }),
+    faq(movingFaq),
+    breadcrumbs(site, crumbs),
+  ]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="03 — Montagem e mudança"
+    lead="Mudar de casa não precisa significar deixar o planejado para trás. Desmontagem cuidadosa, remontagem no novo endereço e os ajustes que o novo espaço pedir."
+    art={{ kind: 'drawing', name: 'exploded' }}
+    photo="montagem/hero.jpg"
+    imageAlt="Módulo de móvel planejado em vista explodida"
+    refCode="Montagem · Mudança"
+    ctaLabel="Vou mudar, quero orçamento"
+    ctaHref={whatsappUrl(messages.service('montagem e mudança'))}
+    secondaryLabel="Como funciona"
+    secondaryHref="#mg-steps"
+  >
+    <Fragment slot="title">
+      <Line>Montagem, desmontagem</Line>
+      <Line>e mudança de planejados</Line>
+      <Line><span class="serif">em Londrina</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <section class="mg section" data-theme="navy" id="mg-steps" aria-labelledby="mg-t">
+    <div class="container">
+      <h2 id="mg-t" class="mg-h" data-split>
+        <Line>Do endereço antigo</Line>
+        <Line><span class="serif hl">ao novo lar.</span></Line>
+      </h2>
+      <ol class="mg-list" role="list">
+        {steps.map((s, i) => (
+          <li class="mg-step">
+            <div class="mg-img" data-reveal="clip" data-delay={String(i * 0.08)}>
+              <Frame photo={s.photo} alt={`${s.k}: ${s.t}`} art={s.art} tone={i % 2 ? 'mist' : 'deep'} ratio="4/5" sizes="(min-width: 900px) 25vw, 100vw" />
+            </div>
+            <p class="mg-k"><span class="index-num">0{i + 1}</span> {s.k}</p>
+            <p class="mg-txt">{s.t}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Process eyebrow="Como funciona o orçamento" />
+  <Faq items={movingFaq} title="Mudança: dúvidas comuns" />
+  <RelatedServices current="montagem" />
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .mg-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; margin-bottom: clamp(40px, 5vw, 80px); }
+  .mg-h :global(.serif) { font-weight: 400; }
+  .mg-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px); counter-reset: s; }
+  .mg-step { display: grid; gap: 14px; align-content: start; }
+  .mg-step:nth-child(even) { margin-top: 48px; }
+  .mg-k { font-weight: 800; font-size: var(--fs-md); text-transform: uppercase; letter-spacing: 0.1em; display: flex; gap: 10px; align-items: baseline; }
+  .mg-txt { opacity: 0.75; font-size: var(--fs-sm); }
+  @media (max-width: 900px) { .mg-list { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .mg-list { grid-template-columns: 1fr; } .mg-step:nth-child(even) { margin-top: 0; } }
+</style>

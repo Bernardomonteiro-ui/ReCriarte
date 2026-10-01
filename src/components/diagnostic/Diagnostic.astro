@@ -1,0 +1,348 @@
+---
+import Planejado from '@/components/illustrations/Planejado.astro';
+import Line from '@/components/motion/Line.astro';
+import PhotoUpload from '@/components/whatsapp/PhotoUpload.astro';
+import { issues } from '@/data/issues';
+import { whatsappUrl, messages } from '@/utils/whatsapp';
+---
+
+<section class="dg section" id="diagnostico" data-theme="mist" aria-labelledby="dg-title" data-diagnostic>
+  <div class="container">
+    <header class="dg-head">
+      <div>
+        <p class="eyebrow" data-reveal>03 — Diagnóstico</p>
+        <h2 id="dg-title" class="dg-title" data-split>
+          <Line>Onde <span class="serif">dói</span></Line>
+          <Line>o seu móvel?</Line>
+        </h2>
+      </div>
+      <p class="lead" data-reveal data-delay="0.1">
+        Toque nos pontos que estão dando problema — pode marcar mais de um. No fim, você manda o diagnóstico pronto no WhatsApp.
+      </p>
+    </header>
+
+    <div class="dg-grid">
+      <div class="dg-left">
+        <div class="dg-stage" data-stage data-reveal="clip">
+          <span class="dg-stage-ref tech" aria-hidden="true">Toque nos pontos ●</span>
+          <div class="dg-draw">
+            <Planejado mode="solid" title="Desenho de um móvel planejado com pontos de problema marcáveis" />
+            <ul class="dg-spots" role="list">
+              {issues.map((it) => (
+                <li class="hs-wrap" style={`left:${it.x}%;top:${it.y}%`}>
+                  <button
+                    type="button"
+                    class:list={['hs', { 'hs--left': it.x > 62 }]}
+                    aria-pressed="false"
+                    aria-describedby={`tip-${it.id}`}
+                    data-issue={it.id}
+                    data-part={it.part}
+                    data-label={it.label}
+                  >
+                    <span class="hs-ring" aria-hidden="true"></span>
+                    <span class="hs-num" aria-hidden="true">{it.num}</span>
+                    <span class="sr-only">Marcar: {it.label}</span>
+                  </button>
+                  <span class:list={['hs-tip', { 'hs-tip--left': it.x > 62 }]} id={`tip-${it.id}`} role="tooltip">
+                    <span class="hs-tip-k">{it.num} · {it.label}</span>
+                    <span class="hs-tip-d">{it.desc}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <fieldset class="dg-list">
+          <legend class="tech">Ou escolha na lista</legend>
+          <div class="dg-chips">
+            {issues.map((it) => (
+              <button type="button" class="chip" aria-pressed="false" data-chip={it.id}>
+                <span class="chip-num" aria-hidden="true">{it.num}</span>{it.label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="dg-panel" data-theme="navy" aria-labelledby="dg-result">
+        <p class="tech dg-panel-k" id="dg-result">Seu diagnóstico</p>
+        <div class="dg-counter" aria-live="polite">
+          <span class="dg-n" data-n>00</span>
+          <span class="dg-n-txt" data-n-txt>Nenhum ponto marcado ainda.<br /><span>Comece tocando no móvel.</span></span>
+        </div>
+        <ul class="dg-picked" role="list" data-picked></ul>
+
+        <PhotoUpload id="dg-fotos" compact />
+
+        <a
+          class="btn btn--block dg-send"
+          href={whatsappUrl(messages.default)}
+          target="_blank"
+          rel="noopener"
+          aria-disabled="true"
+          data-send
+          data-wa="diagnostico"
+        >Enviar meu diagnóstico <span class="arrow" aria-hidden="true">→</span></a>
+        <button type="button" class="btn btn--ghost btn--block dg-share" hidden data-share>Compartilhar com as fotos</button>
+        <p class="dg-hint" data-hint>Marque pelo menos um ponto para montar a mensagem.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dg-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; margin-bottom: clamp(40px, 5vw, 72px); }
+  .dg-head .eyebrow { margin-bottom: 20px; }
+  .dg-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+  .dg-title .serif { font-weight: 400; }
+
+  .dg-grid { display: grid; grid-template-columns: minmax(0, 7.4fr) minmax(0, 4.6fr); gap: clamp(20px, 2.4vw, 40px); align-items: start; }
+
+  /* ---------- Palco ---------- */
+  .dg-stage {
+    position: relative;
+    background: var(--white);
+    padding: clamp(28px, 4vw, 64px) clamp(16px, 3vw, 48px);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+  }
+  .dg-stage-ref { position: absolute; left: 20px; top: 16px; color: var(--gray); }
+  .dg-draw { position: relative; }
+  .dg-spots { position: absolute; inset: 0; }
+  .hs-wrap { position: absolute; width: 0; height: 0; }
+
+  .hs {
+    position: absolute; left: -22px; top: -22px;
+    width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center;
+    z-index: 2;
+    transition: transform 0.45s var(--ease-out);
+  }
+  .hs-ring {
+    position: absolute; inset: 6px; border-radius: 50%;
+    background: var(--navy);
+    box-shadow: 0 0 0 0 rgb(14 24 59 / 0.35);
+    animation: ring 2.8s var(--ease-out) infinite;
+    transition: background-color 0.3s, inset 0.4s var(--ease-out);
+  }
+  .hs-num { position: relative; color: var(--white); font-size: 10px; font-weight: 800; letter-spacing: 0.04em; transition: color 0.3s; }
+  @keyframes ring { 0% { box-shadow: 0 0 0 0 rgb(14 24 59 / 0.35); } 70%, 100% { box-shadow: 0 0 0 14px rgb(14 24 59 / 0); } }
+
+  .hs:hover, .hs:focus-visible, .hs.is-peek { transform: scale(1.25); z-index: 4; }
+  .hs[aria-pressed='true'] .hs-ring { background: var(--yellow); inset: 2px; animation: none; box-shadow: 0 0 0 3px var(--navy); }
+  .hs[aria-pressed='true'] .hs-num { color: var(--navy); }
+  .hs.is-confirm .hs-ring::after {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--yellow);
+    animation: confirm 0.6s var(--ease-out) forwards;
+  }
+  @keyframes confirm { to { inset: -22px; opacity: 0; } }
+
+  .hs-tip {
+    position: absolute; left: 34px; top: 0; z-index: 5;
+    width: max-content; max-width: 240px;
+    transform: translateY(-50%);
+    background: var(--navy); color: var(--white);
+    padding: 14px 16px;
+    display: grid; gap: 6px;
+    opacity: 0; visibility: hidden;
+    translate: -8px 0;
+    transition: opacity 0.3s, translate 0.45s var(--ease-out), visibility 0.3s;
+    pointer-events: none;
+  }
+  .hs-tip::before { /* linha de conexão */
+    content: ''; position: absolute; right: 100%; top: 50%; width: 14px; height: 1.5px; background: var(--navy);
+  }
+  .hs-tip--left { left: auto; right: 34px; translate: 8px 0; }
+  .hs-tip--left::before { right: auto; left: 100%; }
+  .hs-tip-k { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); }
+  .hs-tip-d { font-size: 12.5px; line-height: 1.45; font-weight: 500; opacity: 0.85; }
+  .hs:hover + .hs-tip, .hs:focus-visible + .hs-tip, .hs.is-peek + .hs-tip { opacity: 1; visibility: visible; translate: 0 0; }
+
+  /* ---------- Lista ---------- */
+  .dg-list { border: 0; padding: 0; margin: 20px 0 0; }
+  .dg-list legend { color: var(--gray); margin-bottom: 12px; }
+  .dg-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 10px;
+    min-height: 44px; padding: 0 16px;
+    background: var(--white);
+    box-shadow: inset 0 0 0 1px var(--line);
+    font-size: var(--fs-sm); font-weight: 600;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  .chip:hover { box-shadow: inset 0 0 0 1.5px var(--navy); }
+  .chip-num { font-size: 10px; font-weight: 800; color: var(--gray); }
+  .chip[aria-pressed='true'] { background: var(--navy); color: var(--white); box-shadow: none; }
+  .chip[aria-pressed='true'] .chip-num { color: var(--yellow); }
+
+  /* ---------- Painel ---------- */
+  .dg-panel {
+    position: sticky; top: 88px;
+    padding: clamp(24px, 2.6vw, 40px);
+    display: grid; gap: 22px;
+    --line-strong: rgb(248 251 254 / 0.3);
+  }
+  .dg-panel-k { color: var(--yellow); }
+  .dg-counter { display: flex; align-items: center; gap: 18px; }
+  .dg-n {
+    font-size: clamp(4rem, 7vw, 6.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.85;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.4s;
+  }
+  .dg.has-picks .dg-n { color: var(--yellow); }
+  .dg-n-txt { font-weight: 700; line-height: 1.35; }
+  .dg-n-txt span { font-weight: 500; opacity: 0.6; }
+  .dg-picked { display: grid; gap: 0; }
+  .dg-picked:empty { display: none; }
+  .dg-picked li {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 0; border-top: 1px solid var(--line);
+    font-weight: 600;
+    animation: slidein 0.5s var(--ease-out);
+  }
+  .dg-picked li:last-child { border-bottom: 1px solid var(--line); }
+  .dg-picked li::before { content: '•'; color: var(--yellow); margin-right: 4px; }
+  .dg-picked li span { flex: 1; }
+  .dg-picked button { width: 32px; height: 32px; display: grid; place-items: center; opacity: 0.6; font-size: 18px; }
+  .dg-picked button:hover { opacity: 1; color: var(--yellow); }
+  @keyframes slidein { from { opacity: 0; transform: translateX(-12px); } }
+
+  .dg-send[aria-disabled='true'] { --btn-bg: rgb(248 251 254 / 0.08); --btn-fg: rgb(248 251 254 / 0.45); pointer-events: none; }
+  .dg-hint { font-size: var(--fs-xs); opacity: 0.6; text-align: center; margin-top: -10px; }
+
+  @media (max-width: 1000px) {
+    .dg-head, .dg-grid { grid-template-columns: 1fr; }
+    .dg-panel { position: relative; top: 0; }
+  }
+  @media (max-width: 600px) {
+    .dg-stage { margin-inline: calc(var(--gutter) * -1); padding-inline: 10px; }
+    .hs-tip { display: none; } /* no celular a descrição aparece no painel / lista */
+    .hs { left: -20px; top: -20px; width: 40px; height: 40px; }
+  }
+</style>
+
+<script>
+  import { issues } from '@/data/issues';
+  import { whatsappUrl, messages } from '@/utils/whatsapp';
+  import { track, trackOnce } from '@/utils/track';
+
+  const root = document.querySelector<HTMLElement>('[data-diagnostic]');
+  if (root) {
+    const svg = root.querySelector<SVGSVGElement>('[data-stage] svg')!;
+    const spots = [...root.querySelectorAll<HTMLButtonElement>('[data-issue]')];
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-chip]')];
+    const picked = root.querySelector<HTMLUListElement>('[data-picked]')!;
+    const n = root.querySelector<HTMLElement>('[data-n]')!;
+    const nTxt = root.querySelector<HTMLElement>('[data-n-txt]')!;
+    const send = root.querySelector<HTMLAnchorElement>('[data-send]')!;
+    const share = root.querySelector<HTMLButtonElement>('[data-share]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const upload = root.querySelector<HTMLElement & { files?: File[] }>('[data-upload]')!;
+
+    const selected = new Set<string>();
+    let photoCount = 0;
+    const byId = new Map(issues.map((i) => [i.id, i]));
+    const part = (id: string) => svg.querySelector(`[data-part="${byId.get(id)?.part}"]`);
+
+    new IntersectionObserver((e, o) => {
+      if (e[0].isIntersecting) { trackOnce('diagnostic_opened'); o.disconnect(); }
+    }, { threshold: 0.35 }).observe(root);
+
+    const labels = () => [...selected].map((id) => byId.get(id)!.label);
+
+    const update = () => {
+      const count = selected.size;
+      n.textContent = String(count).padStart(2, '0');
+      root.classList.toggle('has-picks', count > 0);
+      nTxt.innerHTML = count === 0
+        ? 'Nenhum ponto marcado ainda.<br /><span>Comece tocando no móvel.</span>'
+        : `${count === 1 ? 'ponto precisa' : 'pontos precisam'}<br />de atenção.`;
+
+      picked.innerHTML = '';
+      selected.forEach((id) => {
+        const li = document.createElement('li');
+        const s = document.createElement('span');
+        s.textContent = byId.get(id)!.label;
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = '×';
+        b.setAttribute('aria-label', `Remover ${byId.get(id)!.label}`);
+        b.addEventListener('click', () => toggle(id));
+        li.append(s, b);
+        picked.append(li);
+      });
+
+      spots.forEach((b) => b.setAttribute('aria-pressed', String(selected.has(b.dataset.issue!))));
+      chips.forEach((b) => b.setAttribute('aria-pressed', String(selected.has(b.dataset.chip!))));
+      svg.querySelectorAll('[data-part]').forEach((p) => p.classList.remove('is-picked'));
+      selected.forEach((id) => part(id)?.classList.add('is-picked'));
+
+      send.href = whatsappUrl(count ? messages.diagnostic(labels(), photoCount) : messages.default);
+      send.setAttribute('aria-disabled', String(count === 0));
+      hint.hidden = count > 0;
+      const canShareFiles = photoCount > 0 && count > 0 && !!navigator.canShare?.({ files: upload.files ?? [] });
+      share.hidden = !canShareFiles;
+    };
+
+    const toggle = (id: string, origin?: HTMLElement) => {
+      if (selected.has(id)) selected.delete(id);
+      else {
+        selected.add(id);
+        track('diagnostic_issue_selected', { issue: id });
+        const spot = spots.find((s) => s.dataset.issue === id);
+        spot?.classList.remove('is-confirm');
+        void spot?.offsetWidth;
+        spot?.classList.add('is-confirm');
+      }
+      update();
+      origin?.focus();
+    };
+
+    // Hover / foco destacam a área do desenho
+    const hot = (id: string, on: boolean) => part(id)?.classList.toggle('is-hot', on);
+    spots.forEach((b) => {
+      const id = b.dataset.issue!;
+      b.addEventListener('pointerenter', () => hot(id, true));
+      b.addEventListener('pointerleave', () => hot(id, false));
+      b.addEventListener('focus', () => hot(id, true));
+      b.addEventListener('blur', () => hot(id, false));
+      b.addEventListener('click', () => {
+        toggle(id);
+        // toque: mostra a descrição rapidamente
+        b.classList.add('is-peek');
+        setTimeout(() => b.classList.remove('is-peek'), 2200);
+      });
+    });
+    chips.forEach((c) => {
+      const id = c.dataset.chip!;
+      c.addEventListener('click', () => toggle(id));
+      c.addEventListener('pointerenter', () => hot(id, true));
+      c.addEventListener('pointerleave', () => hot(id, false));
+    });
+
+    upload.addEventListener('photos:change', (e) => {
+      photoCount = (e as CustomEvent<{ count: number }>).detail.count;
+      update();
+    });
+
+    send.addEventListener('click', (e) => {
+      if (selected.size === 0) { e.preventDefault(); return; }
+      track('diagnostic_completed', { issues: selected.size, photos: photoCount });
+      track('diagnostic_whatsapp_clicked', { issues: selected.size });
+    });
+
+    // Celular: compartilha texto + fotos pelo menu nativo (o usuário escolhe o WhatsApp)
+    share.addEventListener('click', async () => {
+      try {
+        await navigator.share({ text: messages.diagnostic(labels(), photoCount), files: upload.files ?? [] });
+        track('diagnostic_completed', { issues: selected.size, photos: photoCount, via: 'share' });
+      } catch { /* cancelado */ }
+    });
+
+    update();
+  }
+</script>

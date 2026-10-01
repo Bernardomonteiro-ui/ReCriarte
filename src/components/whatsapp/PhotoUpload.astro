@@ -1,0 +1,124 @@
+---
+/**
+ * Upload de fotos 100% local (sem backend): preview, remover, contador.
+ * As fotos NÃO são anexadas automaticamente ao WhatsApp — o texto deixa isso claro.
+ * Dispara `photos:change` com { count } e expõe os arquivos em el.files.
+ */
+interface Props { id?: string; compact?: boolean }
+const { id = 'fotos', compact = false } = Astro.props;
+---
+
+<div class:list={['up', { 'up--compact': compact }]} data-upload>
+  <div class="up-head">
+    <p class="up-title">Uma foto ajuda a <span class="serif">entender.</span></p>
+    <p class="up-sub">Mostre o que está acontecendo — o móvel inteiro e o detalhe do problema.</p>
+  </div>
+
+  <label class="up-drop" for={id} data-drop>
+    <input id={id} class="sr-only" type="file" accept="image/*" multiple data-input />
+    <svg class="up-ico" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="9" width="32" height="24" rx="1" /><circle cx="20" cy="21" r="6.5" /><path d="M14 9l2.5-4h7L26 9" /></svg>
+    <span class="up-cta"><strong>Escolher fotos</strong> <span class="up-or">ou arraste aqui</span></span>
+    <span class="up-count tech" aria-live="polite" data-count>Nenhuma foto</span>
+  </label>
+
+  <ul class="up-thumbs" role="list" data-thumbs></ul>
+
+  <p class="up-note" data-note hidden>
+    As fotos ficam só no seu aparelho. Ao abrir o WhatsApp, <strong>anexe-as na conversa</strong> — é rapidinho.
+  </p>
+</div>
+
+<style>
+  .up { display: grid; gap: 16px; }
+  .up-title { font-size: var(--fs-lg); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  .up-title .serif { font-weight: 400; }
+  .up-sub { color: var(--ink-soft); font-size: var(--fs-sm); margin-top: 6px; }
+  .up--compact .up-title { font-size: var(--fs-md); }
+
+  .up-drop {
+    position: relative;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px;
+    padding: 20px;
+    border: 1.5px dashed var(--line-strong);
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  .up-drop:hover, .up-drop.is-over { border-color: var(--navy); background: rgb(245 238 10 / 0.12); }
+  .up-drop:focus-within { outline: 2px solid var(--yellow); outline-offset: 2px; }
+  .up-ico { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .up-cta { font-size: var(--fs-sm); }
+  .up-or { color: var(--ink-soft); }
+  .up-count { color: var(--ink-soft); }
+  .up.has-files .up-count { color: var(--navy); background: var(--yellow); padding: 4px 8px; }
+
+  .up-thumbs { display: flex; flex-wrap: wrap; gap: 10px; }
+  .up-thumbs:empty { display: none; }
+  .up-thumb { position: relative; width: 76px; height: 76px; animation: pop 0.45s var(--ease-out); }
+  .up-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .up-thumb button {
+    position: absolute; top: -8px; right: -8px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--navy); color: var(--white);
+    display: grid; place-items: center; font-size: 14px; line-height: 1;
+  }
+  .up-thumb button:hover { background: var(--yellow); color: var(--navy); }
+  @keyframes pop { from { transform: scale(0.6); opacity: 0; } }
+  .up-note { font-size: var(--fs-sm); color: var(--ink-soft); border-left: 2px solid var(--yellow); padding-left: 12px; }
+  @media (max-width: 480px) { .up-drop { grid-template-columns: auto 1fr; } .up-count { grid-column: 1 / -1; } .up-or { display: none; } }
+</style>
+
+<script>
+  const MAX = 10;
+  type UploadEl = HTMLElement & { files?: File[] };
+
+  document.querySelectorAll<UploadEl>('[data-upload]').forEach((root) => {
+    const input = root.querySelector<HTMLInputElement>('[data-input]')!;
+    const drop = root.querySelector<HTMLElement>('[data-drop]')!;
+    const thumbs = root.querySelector<HTMLUListElement>('[data-thumbs]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
+    let files: { file: File; url: string }[] = [];
+
+    const render = () => {
+      thumbs.innerHTML = '';
+      files.forEach((f, i) => {
+        const li = document.createElement('li');
+        li.className = 'up-thumb';
+        const img = document.createElement('img');
+        img.src = f.url;
+        img.alt = `Foto ${i + 1}: ${f.file.name}`;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', `Remover foto ${i + 1}`);
+        btn.textContent = '×';
+        btn.addEventListener('click', () => {
+          URL.revokeObjectURL(f.url);
+          files.splice(i, 1);
+          render();
+          (thumbs.querySelector('button') as HTMLElement | null ?? input).focus();
+        });
+        li.append(img, btn);
+        thumbs.append(li);
+      });
+      const n = files.length;
+      count.textContent = n === 0 ? 'Nenhuma foto' : `${n} foto${n > 1 ? 's' : ''}`;
+      root.classList.toggle('has-files', n > 0);
+      note.hidden = n === 0;
+      root.files = files.map((f) => f.file);
+      root.dispatchEvent(new CustomEvent('photos:change', { bubbles: true, detail: { count: n } }));
+    };
+
+    const add = (list: FileList | null) => {
+      if (!list) return;
+      [...list].filter((f) => f.type.startsWith('image/')).forEach((file) => {
+        if (files.length < MAX) files.push({ file, url: URL.createObjectURL(file) });
+      });
+      render();
+    };
+
+    input.addEventListener('change', () => { add(input.files); input.value = ''; });
+    ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('is-over'); }));
+    ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, () => drop.classList.remove('is-over')));
+    drop.addEventListener('drop', (e) => { e.preventDefault(); add((e as DragEvent).dataTransfer?.files ?? null); });
+  });
+</script>

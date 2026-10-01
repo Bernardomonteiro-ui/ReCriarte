@@ -1,0 +1,64 @@
+---
+import Line from '@/components/motion/Line.astro';
+import Rating from './Rating.astro';
+import { company } from '@/config/company';
+import { reviews } from '@/data/content';
+---
+
+{company.rating.confirmed && (
+  <section class="rv section" aria-labelledby="rv-title">
+    <div class="container rv-in">
+      <div class="rv-left">
+        <p class="eyebrow" data-reveal>09 — Avaliações</p>
+        <h2 id="rv-title" class="rv-title" data-split>
+          <Line>Quem contrata,</Line>
+          <Line><span class="serif">recomenda.</span></Line>
+        </h2>
+      </div>
+
+      <div class="rv-right" data-reveal>
+        <Rating size="lg" />
+        {reviews.length === 0 && (
+          <div class="rv-note">
+            <p>Cada avaliação está no Google, do jeito que o cliente escreveu.</p>
+            {company.googleProfile && (
+              <a href={company.googleProfile} class="link-line" target="_blank" rel="noopener">Ler as avaliações <span class="arrow" aria-hidden="true">↗</span></a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+
+    {reviews.length > 0 && (
+      <div class="rv-track container" role="list" aria-label="Depoimentos de clientes">
+        {reviews.map((r) => (
+          <figure class="rv-card" role="listitem" data-reveal>
+            <span class="rv-stars" aria-label={`${r.rating} de 5 estrelas`}>{'★'.repeat(r.rating)}</span>
+            <blockquote class="serif">“{r.text}”</blockquote>
+            <figcaption class="tech">{r.author}{r.date && ` · ${r.date}`}</figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+  </section>
+)}
+
+<style>
+  .rv-in { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 48px; align-items: end; }
+  .rv-left .eyebrow { margin-bottom: 20px; }
+  .rv-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
+  .rv-title .serif { font-weight: 400; }
+  .rv-right { display: grid; gap: 32px; justify-items: start; border-left: 1px solid var(--line-strong); padding-left: clamp(24px, 4vw, 64px); }
+  .rv-note { display: grid; gap: 14px; max-width: 36ch; color: var(--ink-soft); }
+  .rv-note .link-line { color: var(--navy); justify-self: start; }
+
+  .rv-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(300px, 32%); gap: 24px; overflow-x: auto; margin-top: clamp(48px, 6vw, 88px); padding-bottom: 16px; scroll-snap-type: x mandatory; }
+  .rv-card { scroll-snap-align: start; display: grid; gap: 18px; align-content: start; padding: 32px; background: var(--mist); }
+  .rv-stars { color: var(--navy); letter-spacing: 0.1em; }
+  .rv-card blockquote { font-size: var(--fs-lg); line-height: 1.3; }
+  @media (max-width: 900px) {
+    .rv-in { grid-template-columns: 1fr; }
+    .rv-right { border-left: 0; padding-left: 0; border-top: 1px solid var(--line-strong); padding-top: 32px; }
+    .rv-track { grid-auto-columns: 85%; }
+  }
+</style>

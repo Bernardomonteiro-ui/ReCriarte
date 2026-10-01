@@ -1,0 +1,237 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Line from '@/components/motion/Line.astro';
+import Frame from '@/components/ui/Frame.astro';
+import BeforeAfter from '@/components/before-after/BeforeAfter.astro';
+import ProjetoExecucao from '@/components/before-after/ProjetoExecucao.astro';
+import FinalCta from '@/components/sections/FinalCta.astro';
+import { projects, categories, categoryLabel } from '@/data/portfolio';
+import { breadcrumbs } from '@/utils/schema';
+import { whatsappUrl } from '@/utils/whatsapp';
+
+const site = Astro.site!;
+const crumbs = [{ name: 'Início', href: '/' }, { name: 'Trabalhos', href: '/trabalhos' }];
+// só mostra filtros de categorias que têm trabalhos
+const usedCats = categories.filter((c) => projects.some((p) => p.category === c.id));
+const shapes = ['wide', 'tall', 'sq', 'tall', 'wide', 'sq'];
+const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' };
+---
+
+<BaseLayout
+  title="Trabalhos — manutenção, adaptação e montagem de móveis planejados"
+  description="Trabalhos da ReCriarte em Londrina: manutenção, adaptação, montagem e peças sob medida para móveis planejados. Veja antes e depois e projeto × execução."
+  schema={[breadcrumbs(site, crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Trabalhos"
+    lead="Móveis que continuaram. Cada trabalho mostra o problema, o que foi feito e como o móvel ficou."
+    art={{ kind: 'drawing', name: 'kitchen' }}
+    photo="trabalhos/hero.jpg"
+    imageAlt="Elevação técnica de cozinha planejada"
+    refCode="Portfólio"
+  >
+    <Fragment slot="title">
+      <Line>Feito para durar.</Line>
+      <Line><span class="serif">Pensado para você.</span></Line>
+    </Fragment>
+  </PageHero>
+
+  <section class="tb section" aria-label="Lista de trabalhos" data-works>
+    <div class="container">
+      <div class="tb-filters" role="group" aria-label="Filtrar por tipo de trabalho">
+        <button type="button" class="tb-f" aria-pressed="true" data-filter="all">Todos <sup>{projects.length}</sup></button>
+        {usedCats.map((c) => (
+          <button type="button" class="tb-f" aria-pressed="false" data-filter={c.id}>
+            {c.label} <sup>{projects.filter((p) => p.category === c.id).length}</sup>
+          </button>
+        ))}
+      </div>
+
+      <ul class="tb-grid" role="list" data-grid>
+        {projects.map((p, i) => (
+          <li class:list={['tb-item', `tb-item--${shapes[i % shapes.length]}`]} data-cat={p.category} style={`view-transition-name: tb-${p.id}`}>
+            <button type="button" class="tb-card" data-open={p.id} data-cursor-target aria-haspopup="dialog">
+              <span class="tb-num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="tb-media">
+                <Frame photo={p.cover.photo} alt={`${p.title} — ${categoryLabel(p.category)}`} art={p.cover.art} tone={i % 3 === 1 ? 'navy' : 'mist'} ratio={ratios[shapes[i % shapes.length]]} sizes="(min-width: 900px) 50vw, 100vw" />
+              </span>
+              <span class="tb-meta">
+                <span class="tb-name">{p.title}</span>
+                <span class="tech tb-cat">{categoryLabel(p.category)} · {p.room}</span>
+              </span>
+              <span class="tb-sum">{p.summary}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {projects.map((p) => (
+      <dialog class="tb-dlg" id={p.id} aria-labelledby={`${p.id}-t`} data-dialog>
+        <div class="tb-dlg-in">
+          <header class="tb-dlg-head">
+            <div>
+              <p class="tech tb-dlg-cat">{categoryLabel(p.category)} · {p.room}</p>
+              <h2 id={`${p.id}-t`} class="tb-dlg-t">{p.title}</h2>
+            </div>
+            <button type="button" class="tb-x" data-close aria-label="Fechar trabalho">×</button>
+          </header>
+
+          <div class="tb-dlg-grid">
+            <div class="tb-dlg-cover">
+              <Frame photo={p.cover.photo} alt={`${p.title} — foto principal`} art={p.cover.art} tone="mist" ratio="4/3" />
+            </div>
+            <div class="tb-dlg-info">
+              <p class="tb-dlg-sum">{p.summary}</p>
+              <p class="tech">O que foi feito</p>
+              <ul class="tb-scope" role="list">{p.scope.map((s) => <li>{s}</li>)}</ul>
+              <a class="btn" href={whatsappUrl(`Olá, ReCriarte! Vi o trabalho "${p.title} — ${categoryLabel(p.category)}" no site e tenho algo parecido. Posso enviar fotos?`)} target="_blank" rel="noopener" data-wa="trabalho">
+                Tenho algo parecido <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
+          {p.gallery && p.gallery.length > 0 && (
+            <div class="tb-gal">
+              <p class="tech">Galeria</p>
+              <ul role="list" class="tb-gal-list">
+                {p.gallery.map((g) => <li><Frame photo={g.photo} alt={g.alt} art={g.art} tone="white" ratio="4/3" caption={g.alt} /></li>)}
+              </ul>
+            </div>
+          )}
+
+          {p.beforeAfter && (
+            <div class="tb-block">
+              <p class="tech">Antes | Depois</p>
+              <BeforeAfter id={p.id} before={p.beforeAfter.before} after={p.beforeAfter.after} />
+            </div>
+          )}
+
+          {p.projectExecution && (
+            <div class="tb-block">
+              <p class="tech">Projeto × Execução</p>
+              <ProjetoExecucao project={p.projectExecution.project} execution={p.projectExecution.execution} />
+            </div>
+          )}
+        </div>
+      </dialog>
+    ))}
+  </section>
+
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .tb { padding-top: clamp(24px, 3vw, 48px); }
+  .tb-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(32px, 4vw, 64px); position: sticky; top: 76px; z-index: 5; padding-block: 10px; background: var(--white); }
+  .tb-f {
+    min-height: 44px; padding: 0 18px;
+    font-size: var(--fs-sm); font-weight: 700;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .tb-f sup { font-size: 9px; opacity: 0.6; margin-left: 2px; }
+  .tb-f:hover { box-shadow: inset 0 0 0 1.5px var(--navy); }
+  .tb-f[aria-pressed='true'] { background: var(--navy); color: var(--white); box-shadow: none; }
+  .tb-f[aria-pressed='true'] sup { color: var(--yellow); opacity: 1; }
+
+  .tb-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(40px, 5vw, 80px) clamp(16px, 2vw, 32px); align-items: start; }
+  .tb-item--wide { grid-column: span 7; }
+  .tb-item--tall { grid-column: span 5; }
+  .tb-item--sq { grid-column: span 5; }
+  .tb-item:nth-child(3n + 2) { margin-top: 10%; }
+  .tb-item.is-hidden { display: none; }
+
+  .tb-card { display: grid; gap: 12px; text-align: left; width: 100%; position: relative; }
+  .tb-num { position: absolute; top: 0; left: 0; z-index: 2; font-family: var(--serif); font-style: italic; font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1; background: var(--white); padding: 0.1em 0.3em 0.05em 0; }
+  .tb-media { display: block; overflow: hidden; }
+  .tb-media :global(.frame) { transition: transform 1.1s var(--ease-out); }
+  .tb-card:hover .tb-media :global(.frame) { transform: scale(1.04); }
+  .tb-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line-strong); padding-bottom: 10px; }
+  .tb-name { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.04em; transition: transform 0.5s var(--ease-out); }
+  .tb-card:hover .tb-name { transform: translateX(8px); }
+  .tb-cat { color: var(--gray); }
+  .tb-sum { color: var(--ink-soft); font-size: var(--fs-sm); }
+
+  /* ---------- Painel do trabalho ---------- */
+  .tb-dlg {
+    width: min(1200px, 100%); max-width: 100%; height: 100%; max-height: 100%;
+    margin: 0 0 0 auto; padding: 0; border: 0;
+    background: var(--white); color: var(--navy);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .tb-dlg::backdrop { background: rgb(8 15 39 / 0.72); }
+  .tb-dlg[open] { animation: dlg-in 0.7s var(--ease-out); }
+  .tb-dlg[open]::backdrop { animation: fade 0.5s; }
+  @keyframes dlg-in { from { transform: translateX(8%); opacity: 0; } }
+  @keyframes fade { from { opacity: 0; } }
+  .tb-dlg-in { padding: clamp(24px, 4vw, 56px); display: grid; gap: clamp(32px, 4vw, 56px); }
+  .tb-dlg-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; position: sticky; top: calc(clamp(24px, 4vw, 56px) * -1); background: var(--white); padding-block: 16px; z-index: 5; border-bottom: 1px solid var(--line); }
+  .tb-dlg-cat { color: var(--gray); margin-bottom: 8px; }
+  .tb-dlg-t { font-size: var(--fs-2xl); letter-spacing: -0.05em; }
+  .tb-x { width: 52px; height: 52px; flex: none; font-size: 28px; background: var(--yellow); color: var(--navy); display: grid; place-items: center; }
+  .tb-x:hover { background: var(--navy); color: var(--yellow); }
+  .tb-dlg-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: start; }
+  .tb-dlg-info { display: grid; gap: 18px; justify-items: start; }
+  .tb-dlg-sum { font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+  .tb-scope { display: grid; width: 100%; border-top: 1px solid var(--line-strong); }
+  .tb-scope li { padding: 12px 0; border-bottom: 1px solid var(--line-strong); font-weight: 600; }
+  .tb-scope li::before { content: '— '; color: var(--gray); }
+  .tb-gal, .tb-block { display: grid; gap: 14px; }
+  .tb-gal .tech, .tb-block > .tech { color: var(--gray); }
+  .tb-gal-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+  @media (max-width: 900px) {
+    .tb-grid { grid-template-columns: 1fr; }
+    .tb-item--wide, .tb-item--tall, .tb-item--sq { grid-column: auto; }
+    .tb-item:nth-child(3n + 2) { margin-top: 0; }
+    .tb-dlg-grid { grid-template-columns: 1fr; }
+    .tb-filters { top: 64px; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); flex-wrap: nowrap; overflow-x: auto; }
+    .tb-f { flex: none; }
+  }
+</style>
+
+<script>
+  import { track } from '@/utils/track';
+
+  const root = document.querySelector<HTMLElement>('[data-works]');
+  if (root) {
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const items = [...root.querySelectorAll<HTMLElement>('[data-cat]')];
+
+    const apply = (cat: string) => {
+      const run = () => {
+        filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === cat)));
+        items.forEach((it) => it.classList.toggle('is-hidden', cat !== 'all' && it.dataset.cat !== cat));
+      };
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (document.startViewTransition && !reduce) document.startViewTransition(run);
+      else run();
+    };
+    filters.forEach((f) => f.addEventListener('click', () => apply(f.dataset.filter!)));
+
+    // painéis
+    let opener: HTMLElement | null = null;
+    const open = (id: string, from?: HTMLElement) => {
+      const dlg = document.getElementById(id) as HTMLDialogElement | null;
+      if (!dlg || dlg.tagName !== 'DIALOG') return;
+      opener = from ?? null;
+      dlg.showModal();
+      dlg.scrollTop = 0;
+      history.replaceState(null, '', `#${id}`);
+      track('portfolio_project_viewed', { project: id });
+    };
+    root.querySelectorAll<HTMLButtonElement>('[data-open]').forEach((b) => b.addEventListener('click', () => open(b.dataset.open!, b)));
+    root.querySelectorAll<HTMLDialogElement>('[data-dialog]').forEach((dlg) => {
+      dlg.querySelector('[data-close]')?.addEventListener('click', () => dlg.close());
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', () => {
+        history.replaceState(null, '', location.pathname);
+        opener?.focus();
+      });
+    });
+    if (location.hash) open(decodeURIComponent(location.hash.slice(1)));
+  }
+</script>

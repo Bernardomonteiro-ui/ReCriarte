@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO(confirmar): ajuste o domínio se for diferente
+Sitemap: https://recriarte.com.br/sitemap-index.xml

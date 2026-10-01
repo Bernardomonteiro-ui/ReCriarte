@@ -1,0 +1,31 @@
+---
+/**
+ * TODO(asset): substituir pela logo oficial da ReCriarte em SVG
+ * (salvar em src/assets/brand/logo.svg e trocar o conteúdo abaixo).
+ * Enquanto isso, wordmark tipográfico nas cores da marca.
+ */
+interface Props { class?: string; sub?: boolean }
+const { class: cls, sub = true } = Astro.props;
+---
+
+<span class:list={['logo', cls]}>
+  <span class="logo-mark" aria-hidden="true">
+    <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="1" /><path d="M9 24V8h8.2a5 5 0 0 1 0 10H9m7.4 0L23 24" /></svg>
+  </span>
+  <span class="logo-text">
+    <span class="logo-name">Re<span>Criarte</span></span>
+    {sub && <span class="logo-sub">Manutenção de móveis planejados</span>}
+  </span>
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 12px; line-height: 1; }
+  .logo-mark { width: 34px; height: 34px; flex: none; }
+  .logo-mark rect { fill: var(--yellow); }
+  .logo-mark path { fill: none; stroke: var(--navy); stroke-width: 3; stroke-linejoin: round; stroke-linecap: square; }
+  .logo-text { display: grid; gap: 5px; }
+  .logo-name { font-weight: 900; font-size: 1.25rem; letter-spacing: -0.04em; }
+  .logo-name span { font-weight: 600; }
+  .logo-sub { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; }
+  @media (max-width: 480px) { .logo-sub { display: none; } }
+</style>

@@ -1,0 +1,41 @@
+---
+import type { Faq as FaqItem } from '@/data/faq';
+interface Props { items: FaqItem[]; title?: string }
+const { items, title = 'Perguntas frequentes' } = Astro.props;
+---
+
+<section class="fq section" data-theme="mist" aria-labelledby="fq-title">
+  <div class="container fq-in">
+    <div>
+      <p class="eyebrow" data-reveal>Dúvidas</p>
+      <h2 id="fq-title" class="fq-title" data-reveal>{title}</h2>
+    </div>
+    <div class="fq-list">
+      {items.map((f) => (
+        <details class="fq-item" data-reveal>
+          <summary><span>{f.q}</span><span class="fq-ico" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .fq-in { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(32px, 5vw, 96px); }
+  .fq-title { font-size: var(--fs-xl); letter-spacing: -0.04em; margin-top: 20px; }
+  .fq-list { border-top: 1px solid var(--line-strong); }
+  .fq-item { border-bottom: 1px solid var(--line-strong); }
+  .fq-item summary {
+    list-style: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    padding: 24px 0; font-weight: 700; font-size: var(--fs-md); letter-spacing: -0.01em;
+  }
+  .fq-item summary::-webkit-details-marker { display: none; }
+  .fq-ico { position: relative; width: 16px; height: 16px; flex: none; }
+  .fq-ico::before, .fq-ico::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: currentColor; transition: transform 0.4s var(--ease-out); }
+  .fq-ico::after { transform: rotate(90deg); }
+  .fq-item[open] .fq-ico::after { transform: rotate(0); }
+  .fq-item p { padding: 0 48px 28px 0; color: var(--ink-soft); max-width: 70ch; }
+  @media (max-width: 900px) { .fq-in { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Planejado from '@/components/illustrations/Planejado.astro';
+---
+
+<BaseLayout title="Página não encontrada" description="Esta página não existe. Volte para a ReCriarte." noindex headerTone="dark">
+  <section class="nf" data-theme="navy">
+    <div class="container nf-in">
+      <div>
+        <p class="eyebrow">Erro 404</p>
+        <h1 class="nf-t">Essa porta <span class="serif hl">saiu do trilho.</span></h1>
+        <p class="lead">A página que você procurou não existe — mas o seu móvel ainda tem jeito.</p>
+        <div class="nf-ctas">
+          <a href="/" class="btn">Voltar ao início <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="/#diagnostico" class="btn btn--ghost">Fazer o diagnóstico</a>
+        </div>
+      </div>
+      <div class="nf-art"><Planejado mode="worn" title="Móvel com portas desalinhadas" /></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { min-height: 100svh; display: flex; align-items: center; padding: calc(var(--header-h) + 40px) 0 80px; }
+  .nf-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .nf-in > div:first-child { display: grid; gap: 24px; justify-items: start; }
+  .nf-t { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
+  .nf-t .serif { font-weight: 400; display: block; }
+  .nf-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .nf-art :global(.pl--worn) { --pl-stroke: #c8ccd8; --pl-body: #2a3155; --pl-panel: #333a5e; --pl-panel-back: #262c4d; --pl-niche: #1c2244; --pl-item: #4a5277; --pl-item-alt: #59618a; --pl-hand: #9aa1bb; }
+  @media (max-width: 900px) { .nf-in { grid-template-columns: 1fr; } }
+</style>

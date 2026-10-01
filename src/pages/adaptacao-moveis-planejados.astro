@@ -39,12 +39,11 @@ const items = [
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="02 — Adaptação"
     lead="Sua casa mudou, sua rotina mudou. O móvel pode mudar junto — ganhando nova função, nova divisão ou uma nova configuração, sem começar do zero."
     art={{ kind: 'planejado', mode: 'new' }}
     photo="adaptacao/hero.jpg"
     imageAlt="Móvel planejado adaptado com nicho iluminado"
-    refCode="Adaptação · Novo uso"
+    refCode="Novo uso do nicho"
     ctaLabel="Quero adaptar meu móvel"
     ctaHref={whatsappUrl(messages.service('adaptação'))}
     secondaryLabel="Ver antes e depois"
@@ -53,7 +52,7 @@ const items = [
     <Fragment slot="title">
       <Line>Adaptação de</Line>
       <Line>móveis planejados</Line>
-      <Line><span class="serif">em Londrina</span></Line>
+      <Line>em Londrina</Line>
     </Fragment>
   </PageHero>
 
@@ -62,20 +61,20 @@ const items = [
       <div class="ad-head">
         <h2 id="ad-ba-t" class="ad-h" data-split>
           <Line>O mesmo móvel.</Line>
-          <Line><span class="serif">Outra vida.</span></Line>
+          <Line>Outra vida.</Line>
         </h2>
-        <p class="lead" data-reveal>Arraste para comparar. A estrutura continua; o que muda é como ela trabalha para você.</p>
+        <p class="lead">Arraste para comparar. A estrutura continua; o que muda é como ela trabalha para você.</p>
       </div>
       <div data-reveal="clip"><BeforeAfter id="adaptacao" before="adaptacao/antes.jpg" after="adaptacao/depois.jpg" /></div>
     </div>
   </section>
 
-  <Explorer id="ad" eyebrow="O que dá para fazer" title="Seu móvel pode" accent="aprender coisas novas." items={items} />
+  <Explorer id="ad" title="Seu móvel pode" accent="aprender coisas novas." items={items} />
 
   <section class="section" aria-labelledby="ad-px">
     <div class="container">
       <h2 id="ad-px" class="ad-h ad-h--sm" data-split>
-        <Line>Primeiro, o <span class="serif">projeto.</span></Line>
+        <Line>Primeiro, o projeto.</Line>
         <Line>Depois, a execução.</Line>
       </h2>
     </div>
@@ -90,7 +89,7 @@ const items = [
     </div>
   </section>
 
-  <Process eyebrow="Como funciona" />
+  <Process />
   <Faq items={adaptationFaq} title="Adaptação: dúvidas comuns" />
   <RelatedServices current="adaptacao" />
   <FinalCta />

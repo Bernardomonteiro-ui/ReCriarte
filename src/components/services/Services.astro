@@ -7,10 +7,9 @@ import { services } from '@/data/services';
 <section class="sv section" id="servicos" aria-labelledby="sv-title" data-services>
   <div class="container">
     <header class="sv-head">
-      <p class="eyebrow" data-reveal>04 — Serviços</p>
       <h2 id="sv-title" class="sv-title" data-split>
         <Line>Um cuidado para</Line>
-        <Line>cada <span class="serif">necessidade.</span></Line>
+        <Line>cada necessidade.</Line>
       </h2>
     </header>
 
@@ -33,7 +32,7 @@ import { services } from '@/data/services';
                 <div class="sv-m-img">
                   <Frame photo={s.photo} alt={s.imageAlt} art={s.art} tone={i % 2 ? 'navy' : 'mist'} ratio="4/3" refCode={`${s.num} — ${s.title}`} />
                 </div>
-                <a href={s.href} class="link-line">Ver {s.title.toLowerCase()} <span class="arrow" aria-hidden="true">→</span></a>
+                <a href={s.href} class="link-line">Ver {s.title.toLowerCase()}</a>
               </div>
             </div>
           </li>
@@ -55,8 +54,7 @@ import { services } from '@/data/services';
 </section>
 
 <style>
-  .sv-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(40px, 6vw, 96px); }
-  .sv-head .eyebrow { padding-top: 1.2em; }
+  .sv-head { margin-bottom: clamp(40px, 6vw, 96px); }
   .sv-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
   .sv-title .serif { font-weight: 400; }
 
@@ -88,7 +86,7 @@ import { services } from '@/data/services';
   .sv-accent { font-size: var(--fs-lg); color: var(--ink-soft); }
   .sv-sum { max-width: 50ch; color: var(--ink-soft); }
   .sv-items { display: flex; flex-wrap: wrap; gap: 8px; }
-  .sv-items li { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 12px; background: var(--mist); }
+  .sv-items li { font-size: var(--fs-sm); font-weight: 600; padding: 8px 12px; background: var(--mist); }
   .sv-panel-in .link-line { justify-self: start; }
   .sv-m-img { display: none; }
 
@@ -104,7 +102,6 @@ import { services } from '@/data/services';
 
   @media (max-width: 1000px) {
     .sv-head, .sv-grid { grid-template-columns: 1fr; }
-    .sv-head .eyebrow { padding-top: 0; }
     .sv-media { display: none; }
     .sv-m-img { display: block; }
     .sv-panel-in { padding-left: 0; }

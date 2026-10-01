@@ -10,13 +10,12 @@ import { whatsappUrl, messages } from '@/utils/whatsapp';
   <div class="container">
     <header class="dg-head">
       <div>
-        <p class="eyebrow" data-reveal>03 — Diagnóstico</p>
         <h2 id="dg-title" class="dg-title" data-split>
-          <Line>Onde <span class="serif">dói</span></Line>
+          <Line>Onde dói</Line>
           <Line>o seu móvel?</Line>
         </h2>
       </div>
-      <p class="lead" data-reveal data-delay="0.1">
+      <p class="lead">
         Toque nos pontos que estão dando problema — pode marcar mais de um. No fim, você manda o diagnóstico pronto no WhatsApp.
       </p>
     </header>
@@ -44,7 +43,7 @@ import { whatsappUrl, messages } from '@/utils/whatsapp';
                     <span class="sr-only">Marcar: {it.label}</span>
                   </button>
                   <span class:list={['hs-tip', { 'hs-tip--left': it.x > 62 }]} id={`tip-${it.id}`} role="tooltip">
-                    <span class="hs-tip-k">{it.num} · {it.label}</span>
+                    <span class="hs-tip-k">{it.label}</span>
                     <span class="hs-tip-d">{it.desc}</span>
                   </span>
                 </li>
@@ -63,6 +62,7 @@ import { whatsappUrl, messages } from '@/utils/whatsapp';
             ))}
           </div>
         </fieldset>
+        <p class="dg-more">Quer entender cada problema antes? Veja <a href="/manutencao-moveis-planejados-londrina">como funciona a manutenção de móveis planejados</a>.</p>
       </div>
 
       <aside class="dg-panel" data-theme="navy" aria-labelledby="dg-result">
@@ -93,7 +93,6 @@ import { whatsappUrl, messages } from '@/utils/whatsapp';
 
 <style>
   .dg-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; margin-bottom: clamp(40px, 5vw, 72px); }
-  .dg-head .eyebrow { margin-bottom: 20px; }
   .dg-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
   .dg-title .serif { font-weight: 400; }
 
@@ -165,6 +164,8 @@ import { whatsappUrl, messages } from '@/utils/whatsapp';
   /* ---------- Lista ---------- */
   .dg-list { border: 0; padding: 0; margin: 20px 0 0; }
   .dg-list legend { color: var(--gray); margin-bottom: 12px; }
+  .dg-more { margin-top: 20px; font-size: var(--fs-sm); color: var(--ink-soft); }
+  .dg-more a { color: var(--navy); font-weight: 700; text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; text-underline-offset: 3px; }
   .dg-chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
     display: inline-flex; align-items: center; gap: 10px;

@@ -27,7 +27,7 @@ const steps = [
 ---
 
 <BaseLayout
-  title="Montagem, desmontagem e mudança de móveis planejados em Londrina"
+  title="Montagem e mudança de móveis planejados em Londrina"
   description={description}
   serviceId="montagem"
   schema={[
@@ -38,12 +38,11 @@ const steps = [
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="03 — Montagem e mudança"
     lead="Mudar de casa não precisa significar deixar o planejado para trás. Desmontagem cuidadosa, remontagem no novo endereço e os ajustes que o novo espaço pedir."
     art={{ kind: 'drawing', name: 'exploded' }}
     photo="montagem/hero.jpg"
     imageAlt="Módulo de móvel planejado em vista explodida"
-    refCode="Montagem · Mudança"
+    refCode="Módulo em vista explodida"
     ctaLabel="Vou mudar, quero orçamento"
     ctaHref={whatsappUrl(messages.service('montagem e mudança'))}
     secondaryLabel="Como funciona"
@@ -52,7 +51,7 @@ const steps = [
     <Fragment slot="title">
       <Line>Montagem, desmontagem</Line>
       <Line>e mudança de planejados</Line>
-      <Line><span class="serif">em Londrina</span></Line>
+      <Line>em Londrina</Line>
     </Fragment>
   </PageHero>
 
@@ -76,7 +75,7 @@ const steps = [
     </div>
   </section>
 
-  <Process eyebrow="Como funciona o orçamento" />
+  <Process />
   <Faq items={movingFaq} title="Mudança: dúvidas comuns" />
   <RelatedServices current="montagem" />
   <FinalCta />
@@ -88,7 +87,7 @@ const steps = [
   .mg-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px); counter-reset: s; }
   .mg-step { display: grid; gap: 14px; align-content: start; }
   .mg-step:nth-child(even) { margin-top: 48px; }
-  .mg-k { font-weight: 800; font-size: var(--fs-md); text-transform: uppercase; letter-spacing: 0.1em; display: flex; gap: 10px; align-items: baseline; }
+  .mg-k { font-weight: 800; font-size: var(--fs-lg); letter-spacing: -0.02em; display: flex; gap: 10px; align-items: baseline; }
   .mg-txt { opacity: 0.75; font-size: var(--fs-sm); }
   @media (max-width: 900px) { .mg-list { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .mg-list { grid-template-columns: 1fr; } .mg-step:nth-child(even) { margin-top: 0; } }

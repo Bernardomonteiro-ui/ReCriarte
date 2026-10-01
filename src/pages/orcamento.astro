@@ -25,7 +25,7 @@ const photoOpts = ['Sim, já tenho', 'Vou tirar agora', 'Não consigo enviar'];
         <Breadcrumbs items={crumbs} />
         <h1 id="qt-title" class="qt-title" data-split>
           <Line>Quatro perguntas.</Line>
-          <Line><span class="serif">Um caminho.</span></Line>
+          <Line>Um caminho.</Line>
         </h1>
         <p class="lead">Leva menos de um minuto. No fim, a mensagem vai pronta para o nosso WhatsApp.</p>
 
@@ -95,8 +95,8 @@ const photoOpts = ['Sim, já tenho', 'Vou tirar agora', 'Não consigo enviar'];
         <p class="qt-err" data-err role="alert" hidden></p>
 
         <div class="qt-nav">
-          <button type="button" class="link-line" data-prev hidden><span class="arrow" aria-hidden="true">←</span> Voltar</button>
-          <button type="button" class="btn" data-next>Próxima <span class="arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="link-line" data-prev hidden>Voltar</button>
+          <button type="button" class="btn" data-next>Próxima</button>
           <a class="btn" href={whatsappUrl(messages.default)} target="_blank" rel="noopener" data-send data-wa="orcamento" hidden>Enviar pelo WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
         </div>
         <p class="qt-note" data-note hidden>Ao abrir o WhatsApp, anexe as fotos na conversa — elas não são enviadas automaticamente.</p>

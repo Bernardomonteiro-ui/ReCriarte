@@ -14,14 +14,14 @@ import Reviews from '@/components/testimonials/Reviews.astro';
 import Team from '@/components/team/Team.astro';
 import B2B from '@/components/b2b/B2B.astro';
 import FinalCta from '@/components/sections/FinalCta.astro';
-import { faq } from '@/utils/schema';
+import { faq, website } from '@/utils/schema';
 import { homeFaq } from '@/data/faq';
 ---
 
 <BaseLayout
-  title="Manutenção de móveis planejados em Londrina | ReCriarte"
-  description="Seu planejado não precisa ser trocado. A ReCriarte faz manutenção, adaptação, montagem e peças sob medida para móveis planejados em Londrina — PR. Mande uma foto pelo WhatsApp."
-  schema={[faq(homeFaq)]}
+  title="ReCriarte — Manutenção de móveis planejados em Londrina"
+  description="Seu planejado não precisa ser trocado. Manutenção, adaptação, montagem e peças sob medida para móveis planejados em Londrina. Mande uma foto no WhatsApp."
+  schema={[website(Astro.site!), faq(homeFaq)]}
 >
   <Hero />
   <Transition />

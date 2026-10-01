@@ -38,12 +38,11 @@ const items = [
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="04 — Peças sob medida"
     lead="O foco não é vender um móvel novo: é completar o que você já tem. Uma peça que faltava, um módulo complementar, uma solução específica — no mesmo cuidado do original."
     art={{ kind: 'drawing', name: 'custom' }}
     photo="sob-medida/hero.jpg"
     imageAlt="Peça sob medida integrada a um móvel existente"
-    refCode="Sob medida · Complemento"
+    refCode="Módulo novo ao lado do existente"
     ctaLabel="Preciso de uma peça"
     ctaHref={whatsappUrl(messages.service('peças sob medida'))}
     secondaryLabel="Ver soluções"
@@ -52,29 +51,29 @@ const items = [
     <Fragment slot="title">
       <Line>Peças e móveis</Line>
       <Line>sob medida</Line>
-      <Line><span class="serif">em Londrina</span></Line>
+      <Line>em Londrina</Line>
     </Fragment>
   </PageHero>
 
   <section class="sm section" data-theme="navy" aria-label="Nosso foco">
     <div class="container sm-in">
-      <p class="sm-quote" data-reveal>
+      <p class="sm-quote">
         A gente não começa do zero.<br />
         <span class="serif hl">A gente começa do que você já tem.</span>
       </p>
-      <p class="lead" data-reveal data-delay="0.1">
+      <p class="lead">
         O foco da ReCriarte não é competir com as grandes lojas de planejados — é resolver necessidades do móvel existente — com peças que se encaixam nele.
       </p>
     </div>
   </section>
 
-  <Explorer id="sm" eyebrow="O que fazemos sob medida" title="A peça certa" accent="para o que já existe." items={items} />
+  <Explorer id="sm" title="A peça certa" accent="para o que já existe." items={items} />
 
   <section class="section" data-theme="mist" aria-labelledby="sm-px">
     <div class="container">
       <h2 id="sm-px" class="sm-h" data-split>
         <Line>Medido, desenhado,</Line>
-        <Line><span class="serif">encaixado.</span></Line>
+        <Line>encaixado.</Line>
       </h2>
     </div>
     <div class="container sm-wide">
@@ -89,7 +88,7 @@ const items = [
     </div>
   </section>
 
-  <Process eyebrow="Como funciona" />
+  <Process />
   <Faq items={customFaq} title="Sob medida: dúvidas comuns" />
   <RelatedServices current="sob-medida" />
   <FinalCta />

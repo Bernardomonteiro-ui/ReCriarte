@@ -10,23 +10,22 @@ const { showPageLink = true } = Astro.props;
 <section class="bb section" aria-labelledby="bb-title">
   <div class="container bb-in">
     <div class="bb-media" data-reveal="clip">
-      <Frame photo="b2b/parceiros.jpg" alt="Projeto de móvel planejado em continuidade" art={{ kind: 'drawing', name: 'kitchen' }} tone="navy" ratio="4/5" refCode="B2B" caption="Projeto · Continuidade" sizes="(min-width: 900px) 40vw, 100vw" />
+      <Frame photo="b2b/parceiros.jpg" alt="Projeto de móvel planejado em continuidade" art={{ kind: 'drawing', name: 'kitchen' }} tone="navy" ratio="4/5"  sizes="(min-width: 900px) 40vw, 100vw" />
     </div>
     <div class="bb-copy">
-      <p class="eyebrow" data-reveal>11 — Para empresas</p>
       <h2 id="bb-title" class="bb-title" data-split>
         <Line>Quando o projeto</Line>
-        <Line>precisa <span class="serif">continuar.</span></Line>
+        <Line>precisa continuar.</Line>
       </h2>
-      <p class="lead" data-reveal>
+      <p class="lead">
         Assistência, ajustes, montagem e adaptações para quem trabalha com móveis planejados — e precisa de um parceiro que cuide do que vem depois da entrega.
       </p>
-      <ul class="bb-aud" role="list" data-reveal>
+      <ul class="bb-aud" role="list">
         {b2bAudiences.map((a) => <li>{a}</li>)}
       </ul>
-      <div class="bb-ctas" data-reveal>
+      <div class="bb-ctas">
         <a href={whatsappUrl(messages.b2b)} class="btn" target="_blank" rel="noopener" data-wa="b2b">Falar com a ReCriarte <span class="arrow" aria-hidden="true">→</span></a>
-        {showPageLink && <a href="/empresas" class="link-line">Saiba mais <span class="arrow" aria-hidden="true">→</span></a>}
+        {showPageLink && <a href="/empresas" class="link-line">Saiba mais</a>}
       </div>
     </div>
   </div>

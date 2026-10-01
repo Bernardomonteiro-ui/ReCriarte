@@ -9,20 +9,19 @@ import { reviews } from '@/data/content';
   <section class="rv section" aria-labelledby="rv-title">
     <div class="container rv-in">
       <div class="rv-left">
-        <p class="eyebrow" data-reveal>09 — Avaliações</p>
         <h2 id="rv-title" class="rv-title" data-split>
           <Line>Quem contrata,</Line>
-          <Line><span class="serif">recomenda.</span></Line>
+          <Line>recomenda.</Line>
         </h2>
       </div>
 
-      <div class="rv-right" data-reveal>
+      <div class="rv-right">
         <Rating size="lg" />
         {reviews.length === 0 && (
           <div class="rv-note">
             <p>Cada avaliação está no Google, do jeito que o cliente escreveu.</p>
             {company.googleProfile && (
-              <a href={company.googleProfile} class="link-line" target="_blank" rel="noopener">Ler as avaliações <span class="arrow" aria-hidden="true">↗</span></a>
+              <a href={company.googleProfile} class="link-line" target="_blank" rel="noopener">Ler as avaliações</a>
             )}
           </div>
         )}
@@ -32,7 +31,7 @@ import { reviews } from '@/data/content';
     {reviews.length > 0 && (
       <div class="rv-track container" role="list" aria-label="Depoimentos de clientes">
         {reviews.map((r) => (
-          <figure class="rv-card" role="listitem" data-reveal>
+          <figure class="rv-card" role="listitem">
             <span class="rv-stars" aria-label={`${r.rating} de 5 estrelas`}>{'★'.repeat(r.rating)}</span>
             <blockquote class="serif">“{r.text}”</blockquote>
             <figcaption class="tech">{r.author}{r.date && ` · ${r.date}`}</figcaption>
@@ -45,7 +44,6 @@ import { reviews } from '@/data/content';
 
 <style>
   .rv-in { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 48px; align-items: end; }
-  .rv-left .eyebrow { margin-bottom: 20px; }
   .rv-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
   .rv-title .serif { font-weight: 400; }
   .rv-right { display: grid; gap: 32px; justify-items: start; border-left: 1px solid var(--line-strong); padding-left: clamp(24px, 4vw, 64px); }

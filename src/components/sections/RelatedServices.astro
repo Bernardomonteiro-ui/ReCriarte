@@ -7,10 +7,10 @@ const list = services.filter((s) => s.id !== current);
 
 <section class="rs section" aria-labelledby="rs-title">
   <div class="container">
-    <h2 id="rs-title" class="tech rs-k" data-reveal>{title}</h2>
+    <h2 id="rs-title" class="tech rs-k">{title}</h2>
     <ul class="rs-list" role="list">
       {list.map((s) => (
-        <li data-reveal>
+        <li>
           <a href={s.href} class="rs-link">
             <span class="index-num">{s.num}</span>
             <span class="rs-name">{s.title}</span>

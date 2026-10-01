@@ -15,8 +15,8 @@ const { tone = 'light' } = Astro.props;
 
     <nav class="hdr-nav" aria-label="Principal">
       <ul role="list">
-        {nav.map((n, i) => (
-          <li><a href={n.href}><span class="hdr-idx">0{i + 1}</span>{n.label}</a></li>
+        {nav.map((n) => (
+          <li><a href={n.href}>{n.label}</a></li>
         ))}
       </ul>
     </nav>
@@ -33,9 +33,9 @@ const { tone = 'light' } = Astro.props;
   <div class="menu-in container">
     <nav aria-label="Menu principal">
       <ul role="list" class="menu-main">
-        {[{ label: 'Início', href: '/' }, ...nav, { label: 'Orçamento', href: '/orcamento' }].map((n, i) => (
+        {[{ label: 'Início', href: '/' }, ...nav, { label: 'Orçamento', href: '/orcamento' }].map((n) => (
           <li class="menu-item">
-            <a href={n.href} data-menu-link><span class="index-num">0{i + 1}</span><span class="menu-lbl">{n.label}</span></a>
+            <a href={n.href} data-menu-link><span class="menu-lbl">{n.label}</span></a>
           </li>
         ))}
       </ul>
@@ -46,7 +46,7 @@ const { tone = 'light' } = Astro.props;
         {services.map((s) => <li><a href={s.href} data-menu-link>{s.title}</a></li>)}
       </ul>
       <a class="btn btn--block" href={whatsappUrl(messages.default)} target="_blank" rel="noopener" data-wa="menu">
-        Falar no WhatsApp <span class="arrow" aria-hidden="true">→</span>
+        Falar no WhatsApp
       </a>
       <p class="tech menu-city">{company.cityLabel}</p>
     </div>
@@ -80,7 +80,6 @@ const { tone = 'light' } = Astro.props;
     font-size: var(--fs-sm); font-weight: 700; letter-spacing: 0.02em;
     padding-block: 8px;
   }
-  .hdr-idx { font-size: 9px; font-weight: 700; opacity: 0.45; letter-spacing: 0.1em; }
   .hdr-nav a::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px;
     background: var(--yellow); transform: scaleX(0); transform-origin: left;

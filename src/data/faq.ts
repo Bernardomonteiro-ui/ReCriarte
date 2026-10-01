@@ -22,6 +22,14 @@ export const homeFaq: Faq[] = [
 
 export const maintenanceFaq: Faq[] = [
   {
+    q: 'Vocês fazem conserto de armário planejado em Londrina?',
+    a: 'Sim. A ReCriarte faz manutenção e conserto de móveis planejados em Londrina: portas, gavetas, basculantes, portas de correr, puxadores e fita de borda. Mande fotos pelo WhatsApp para a avaliação.',
+  },
+  {
+    q: 'Como se regula uma porta de armário planejado?',
+    a: 'As dobradiças de caneco costumam ter parafusos de regulagem de altura, de lateral e de profundidade. Pequenos ajustes já realinham a porta; quando a dobradiça cedeu ou a furação está danificada, o caminho é trocar a peça ou recuperar a fixação.',
+  },
+  {
     q: 'Porta de armário desalinhada tem conserto?',
     a: 'Na maioria das vezes, sim. O desalinhamento costuma vir da regulagem ou do desgaste da dobradiça. Pelas fotos já dá para ter uma ideia do que é preciso.',
   },

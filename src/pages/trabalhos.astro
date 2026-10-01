@@ -19,13 +19,12 @@ const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' }
 ---
 
 <BaseLayout
-  title="Trabalhos — manutenção, adaptação e montagem de móveis planejados"
+  title="Trabalhos em móveis planejados em Londrina"
   description="Trabalhos da ReCriarte em Londrina: manutenção, adaptação, montagem e peças sob medida para móveis planejados. Veja antes e depois e projeto × execução."
   schema={[breadcrumbs(site, crumbs)]}
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="Trabalhos"
     lead="Móveis que continuaram. Cada trabalho mostra o problema, o que foi feito e como o móvel ficou."
     art={{ kind: 'drawing', name: 'kitchen' }}
     photo="trabalhos/hero.jpg"
@@ -34,7 +33,7 @@ const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' }
   >
     <Fragment slot="title">
       <Line>Feito para durar.</Line>
-      <Line><span class="serif">Pensado para você.</span></Line>
+      <Line>Pensado para você.</Line>
     </Fragment>
   </PageHero>
 
@@ -59,7 +58,7 @@ const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' }
               </span>
               <span class="tb-meta">
                 <span class="tb-name">{p.title}</span>
-                <span class="tech tb-cat">{categoryLabel(p.category)} · {p.room}</span>
+                <span class="tech tb-cat">{categoryLabel(p.category)}, {p.room.toLowerCase()}</span>
               </span>
               <span class="tb-sum">{p.summary}</span>
             </button>
@@ -73,7 +72,7 @@ const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' }
         <div class="tb-dlg-in">
           <header class="tb-dlg-head">
             <div>
-              <p class="tech tb-dlg-cat">{categoryLabel(p.category)} · {p.room}</p>
+              <p class="tech tb-dlg-cat">{categoryLabel(p.category)}, {p.room.toLowerCase()}</p>
               <h2 id={`${p.id}-t`} class="tb-dlg-t">{p.title}</h2>
             </div>
             <button type="button" class="tb-x" data-close aria-label="Fechar trabalho">×</button>
@@ -88,7 +87,7 @@ const ratios: Record<string, string> = { wide: '16/10', tall: '3/4', sq: '1/1' }
               <p class="tech">O que foi feito</p>
               <ul class="tb-scope" role="list">{p.scope.map((s) => <li>{s}</li>)}</ul>
               <a class="btn" href={whatsappUrl(`Olá, ReCriarte! Vi o trabalho "${p.title} — ${categoryLabel(p.category)}" no site e tenho algo parecido. Posso enviar fotos?`)} target="_blank" rel="noopener" data-wa="trabalho">
-                Tenho algo parecido <span class="arrow" aria-hidden="true">→</span>
+                Tenho algo parecido
               </a>
             </div>
           </div>

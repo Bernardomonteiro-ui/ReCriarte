@@ -1,14 +1,13 @@
 ---
 import Line from '@/components/motion/Line.astro';
 import { processSteps } from '@/data/content';
-interface Props { compact?: boolean; eyebrow?: string }
-const { compact = false, eyebrow = '08 — Processo' } = Astro.props;
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
 ---
 
 <section class:list={['pr section', { 'pr--compact': compact }]} data-theme="navy" aria-labelledby="pr-title" data-process>
   <div class="container">
     <header class="pr-head">
-      <p class="eyebrow" data-reveal>{eyebrow}</p>
       <h2 id="pr-title" class="pr-title" data-split>
         <Line>Você sabe o que</Line>
         <Line><span class="hl">vai acontecer.</span></Line>
@@ -31,8 +30,7 @@ const { compact = false, eyebrow = '08 — Processo' } = Astro.props;
 
 <style>
   .pr { --p: 0; overflow: hidden; }
-  .pr-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(56px, 8vw, 128px); }
-  .pr-head .eyebrow { padding-top: 1.2em; }
+  .pr-head { margin-bottom: clamp(56px, 8vw, 128px); }
   .pr-title { font-size: var(--fs-3xl); letter-spacing: -0.05em; }
 
   .pr-steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2.4vw, 40px); padding-top: 48px; }
@@ -53,8 +51,6 @@ const { compact = false, eyebrow = '08 — Processo' } = Astro.props;
   .pr-t { font-size: var(--fs-sm); opacity: 0.7; max-width: 30ch; }
 
   @media (max-width: 900px) {
-    .pr-head { grid-template-columns: 1fr; }
-    .pr-head .eyebrow { padding-top: 0; }
     .pr-steps { grid-template-columns: 1fr; padding-top: 0; padding-left: 40px; gap: 48px; }
     .pr-track { top: 0; bottom: 0; left: 5px; right: auto; width: 2px; height: auto; }
     .pr-fill { transform-origin: top; transform: scaleY(var(--p)); }

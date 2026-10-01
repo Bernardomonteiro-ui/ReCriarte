@@ -7,12 +7,11 @@ const { items, title = 'Perguntas frequentes' } = Astro.props;
 <section class="fq section" data-theme="mist" aria-labelledby="fq-title">
   <div class="container fq-in">
     <div>
-      <p class="eyebrow" data-reveal>Dúvidas</p>
-      <h2 id="fq-title" class="fq-title" data-reveal>{title}</h2>
+      <h2 id="fq-title" class="fq-title">{title}</h2>
     </div>
     <div class="fq-list">
       {items.map((f) => (
-        <details class="fq-item" data-reveal>
+        <details class="fq-item">
           <summary><span>{f.q}</span><span class="fq-ico" aria-hidden="true"></span></summary>
           <p>{f.a}</p>
         </details>
@@ -23,7 +22,7 @@ const { items, title = 'Perguntas frequentes' } = Astro.props;
 
 <style>
   .fq-in { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(32px, 5vw, 96px); }
-  .fq-title { font-size: var(--fs-xl); letter-spacing: -0.04em; margin-top: 20px; }
+  .fq-title { font-size: var(--fs-xl); letter-spacing: -0.04em; }
   .fq-list { border-top: 1px solid var(--line-strong); }
   .fq-item { border-bottom: 1px solid var(--line-strong); }
   .fq-item summary {

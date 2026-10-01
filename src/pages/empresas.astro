@@ -20,19 +20,18 @@ const audiences = [
 ---
 
 <BaseLayout
-  title="Para empresas: assistência e adaptação de móveis planejados"
-  description="A ReCriarte atende arquitetos, lojas de móveis, construtoras e empresas em Londrina com manutenção, montagem, adaptação e peças sob medida para móveis planejados."
+  title="Móveis planejados para empresas e arquitetos"
+  description="Assistência, montagem, adaptação e peças sob medida para arquitetos, lojas de móveis, construtoras e empresas que trabalham com planejados em Londrina."
   schema={[breadcrumbs(site, crumbs)]}
   headerTone="dark"
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="B2B — Parcerias"
     lead="Para quem trabalha com móveis planejados e precisa de um parceiro que cuide do que vem depois: ajustes, assistência, montagem e adaptações."
     art={{ kind: 'drawing', name: 'kitchen' }}
     photo="b2b/hero.jpg"
     imageAlt="Elevação técnica de cozinha planejada"
-    refCode="B2B · Continuidade"
+    refCode="Projeto em continuidade"
     ctaLabel="Falar com a ReCriarte"
     ctaHref={whatsappUrl(messages.b2b)}
     tone="navy"
@@ -47,13 +46,12 @@ const audiences = [
     <div class="container">
       <h2 id="em-t" class="em-h" data-split>
         <Line>Para quem</Line>
-        <Line><span class="serif">a gente trabalha.</span></Line>
+        <Line>a gente trabalha.</Line>
       </h2>
       <ol class="em-list" role="list">
-        {audiences.map((a, i) => (
-          <li class="em-row" data-reveal>
-            <span class="index-num">0{i + 1}</span>
-            <h3 class="em-k">{a.k}</h3>
+        {audiences.map((a) => (
+          <li class="em-row">
+                        <h3 class="em-k">{a.k}</h3>
             <p class="em-t">{a.t}</p>
           </li>
         ))}
@@ -65,7 +63,7 @@ const audiences = [
     <div class="container">
       <h2 id="em-px" class="em-h" data-split>
         <Line>O projeto é seu.</Line>
-        <Line><span class="serif">A continuidade, com a gente.</span></Line>
+        <Line>A continuidade, com a gente.</Line>
       </h2>
     </div>
     <div class="container em-wide">
@@ -80,8 +78,8 @@ const audiences = [
   .em-h { font-size: var(--fs-2xl); letter-spacing: -0.045em; margin-bottom: clamp(32px, 4vw, 64px); }
   .em-h :global(.serif) { font-weight: 400; }
   .em-list { border-top: 1px solid var(--line-strong); }
-  .em-row { display: grid; grid-template-columns: 52px minmax(0, 4fr) minmax(0, 7fr); gap: 20px; align-items: baseline; padding: 28px 0; border-bottom: 1px solid var(--line-strong); }
+  .em-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 20px; align-items: baseline; padding: 28px 0; border-bottom: 1px solid var(--line-strong); }
   .em-k { font-size: var(--fs-xl); letter-spacing: -0.04em; }
   .em-t { color: var(--ink-soft); max-width: 56ch; }
-  @media (max-width: 800px) { .em-row { grid-template-columns: 40px 1fr; } .em-t { grid-column: 2; } .em-wide { padding-inline: 0; } }
+  @media (max-width: 800px) { .em-row { grid-template-columns: 1fr; gap: 8px; } .em-wide { padding-inline: 0; } }
 </style>

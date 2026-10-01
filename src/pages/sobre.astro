@@ -22,18 +22,17 @@ const verbs = ['Recupera.', 'Adapta.', 'Transforma.', 'Recria.'];
 >
   <PageHero
     crumbs={crumbs}
-    eyebrow="Sobre"
     lead="A ReCriarte não vende móveis. Ela resolve o que já existe — e cuida para que o seu planejado continue funcionando, do jeito que foi pensado ou de um jeito novo."
     art={{ kind: 'planejado', mode: 'line', dims: true }}
     photo="sobre/hero.jpg"
     imageAlt="Desenho técnico de móvel planejado"
-    refCode="ReCriarte · Londrina"
+    refCode="Elevação técnica"
     ctaLabel="Falar com a ReCriarte"
     ctaHref={whatsappUrl(messages.default)}
   >
     <Fragment slot="title">
       <Line>Especialistas no</Line>
-      <Line>móvel que <span class="serif">já existe.</span></Line>
+      <Line>móvel que já existe.</Line>
     </Fragment>
   </PageHero>
 
@@ -41,9 +40,8 @@ const verbs = ['Recupera.', 'Adapta.', 'Transforma.', 'Recria.'];
     <div class="container">
       <ul class="sb-verbs" role="list">
         {verbs.map((v, i) => (
-          <li data-reveal data-delay={String(i * 0.08)} class:list={[{ 'sb-last': i === verbs.length - 1 }]}>
-            <span class="index-num">0{i + 1}</span>
-            <span class:list={['sb-v', { 'serif hl': i === verbs.length - 1 }]}>{v}</span>
+          <li class:list={[{ 'sb-last': i === verbs.length - 1 }]}>
+                        <span class:list={['sb-v', { 'serif hl': i === verbs.length - 1 }]}>{v}</span>
           </li>
         ))}
       </ul>
@@ -52,7 +50,7 @@ const verbs = ['Recupera.', 'Adapta.', 'Transforma.', 'Recria.'];
 
   <Manifesto />
   <Team />
-  <Process eyebrow="Como trabalhamos" />
+  <Process />
   <Reviews />
   <FinalCta />
 </BaseLayout>

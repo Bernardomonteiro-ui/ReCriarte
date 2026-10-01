@@ -16,11 +16,11 @@ const { secondaryHref = '/#diagnostico' } = Astro.props;
     </h2>
 
     <div class="fc-row">
-      <div class="fc-ctas" data-reveal>
+      <div class="fc-ctas">
         <a href="/orcamento" class="btn fc-btn">Pedir orçamento <span class="arrow" aria-hidden="true">→</span></a>
         <a href={secondaryHref} class="btn btn--ghost fc-btn">Descobrir o problema <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <dl class="fc-info" data-reveal data-delay="0.1">
+      <dl class="fc-info">
         <div><dt class="tech">Onde</dt><dd>{company.cityLabel}</dd></div>
         <div><dt class="tech">WhatsApp</dt><dd><a href={whatsappUrl(messages.default)} target="_blank" rel="noopener" data-wa="final-cta">{company.phoneDisplay || 'Chamar agora'} ↗</a></dd></div>
         {company.hours.length > 0 && (

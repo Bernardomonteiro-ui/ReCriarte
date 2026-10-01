@@ -8,10 +8,9 @@ import { getPhoto } from '@/utils/photos';
 <section class="tm section" data-theme="mist" aria-labelledby="tm-title">
   <div class="container">
     <header class="tm-head">
-      <p class="eyebrow" data-reveal>10 — Equipe</p>
       <h2 id="tm-title" class="tm-title" data-split>
         <Line>Por trás de cada móvel,</Line>
-        <Line>tem gente que <span class="serif">cuida.</span></Line>
+        <Line>tem gente que cuida.</Line>
       </h2>
     </header>
 
@@ -29,8 +28,7 @@ import { getPhoto } from '@/utils/photos';
             )}
           </div>
           <div class="tm-meta">
-            <span class="index-num">0{i + 1}</span>
-            <h3 class="tm-name">{m.name}</h3>
+                        <h3 class="tm-name">{m.name}</h3>
             {m.role && <p class="tech tm-role">{m.role}</p>}
           </div>
         </li>
@@ -40,8 +38,7 @@ import { getPhoto } from '@/utils/photos';
 </section>
 
 <style>
-  .tm-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px; margin-bottom: clamp(48px, 6vw, 96px); }
-  .tm-head .eyebrow { padding-top: 1.2em; }
+  .tm-head { margin-bottom: clamp(48px, 6vw, 96px); }
   .tm-title { font-size: var(--fs-2xl); letter-spacing: -0.045em; }
   .tm-title .serif { font-weight: 400; }
   .tm-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); }
@@ -62,8 +59,6 @@ import { getPhoto } from '@/utils/photos';
   .tm-name { font-size: var(--fs-2xl); letter-spacing: -0.05em; }
   .tm-role { color: var(--gray); margin-left: auto; }
   @media (max-width: 900px) {
-    .tm-head { grid-template-columns: 1fr; }
-    .tm-head .eyebrow { padding-top: 0; }
     .tm-person { grid-column: 1 / span 10; }
     .tm-person--offset { grid-column: 3 / span 10; margin-top: 0; }
   }

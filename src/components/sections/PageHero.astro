@@ -8,7 +8,6 @@ import type { Art } from '@/utils/types';
 
 interface Props {
   crumbs: Crumb[];
-  eyebrow: string;
   lead: string;
   photo?: string;
   art?: Art;
@@ -22,7 +21,7 @@ interface Props {
   refCode?: string;
 }
 const {
-  crumbs, eyebrow, lead, photo, art = { kind: 'planejado', mode: 'solid' }, imageAlt = '',
+  crumbs, lead, photo, art = { kind: 'planejado', mode: 'solid' }, imageAlt = '',
   ctaLabel, ctaHref, ctaExternal = true, secondaryLabel, secondaryHref, tone = 'light', refCode,
 } = Astro.props;
 ---
@@ -31,11 +30,10 @@ const {
   <div class="container ph-in">
     <div class="ph-copy">
       <Breadcrumbs items={crumbs} />
-      <p class="eyebrow" data-reveal>{eyebrow}</p>
       <h1 id="ph-title" class="ph-title" data-split><slot name="title" /></h1>
-      <p class="lead" data-reveal data-delay="0.15">{lead}</p>
+      <p class="lead">{lead}</p>
       {(ctaLabel || secondaryLabel) && (
-        <div class="ph-ctas" data-reveal data-delay="0.25">
+        <div class="ph-ctas">
           {ctaLabel && ctaHref && (
             <a href={ctaHref} class="btn" target={ctaExternal ? '_blank' : undefined} rel={ctaExternal ? 'noopener' : undefined} data-wa={ctaExternal ? 'page-hero' : undefined}>
               {ctaLabel} <span class="arrow" aria-hidden="true">→</span>

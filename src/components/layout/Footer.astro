@@ -41,7 +41,7 @@ const year = new Date().getFullYear();
           <li>{company.cityLabel}</li>
           {company.address && <li>{company.address}</li>}
           {company.hours.map((h) => <li>{h.days} · {h.hours}</li>)}
-          {company.rating.confirmed && <li class="ftr-rate"><span class="hl" aria-hidden="true">★</span> {ratingLabel} · {company.rating.count} avaliações no {company.rating.source}</li>}
+          {company.rating.confirmed && <li class="ftr-rate"><span class="hl" aria-hidden="true">★</span> Nota {ratingLabel} em {company.rating.count} avaliações no {company.rating.source}</li>}
         </ul>
       </div>
     </div>

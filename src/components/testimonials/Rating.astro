@@ -23,12 +23,12 @@ const Tag = company.googleProfile ? 'a' : 'div';
 
 <style>
   .rating { display: inline-flex; align-items: center; gap: 14px; line-height: 1.2; }
-  .rating-stars { color: var(--navy); letter-spacing: 0.12em; font-size: 0.95rem; }
+  .rating-stars { color: var(--yellow); letter-spacing: 0.12em; font-size: 0.95rem; }
   :global([data-theme='navy']) .rating-stars { color: var(--yellow); }
   .rating-num { font-weight: 900; font-size: 1.6rem; letter-spacing: -0.04em; padding-inline: 14px; border-inline: 1px solid var(--line-strong); }
   .rating-txt { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
   a.rating:hover .rating-txt { text-decoration: underline; }
   .rating--lg .rating-num { font-size: clamp(4rem, 10vw, 9rem); border: 0; padding: 0; line-height: 0.9; }
   .rating--lg { flex-wrap: wrap; gap: 8px 24px; }
-  .rating--lg .rating-stars { font-size: 1.4rem; color: var(--yellow); -webkit-text-stroke: 1px var(--navy); }
+  .rating--lg .rating-stars { font-size: 1.4rem; color: var(--yellow); }
 </style>

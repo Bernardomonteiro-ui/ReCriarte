@@ -34,11 +34,10 @@ const {
 } = Astro.props;
 
 const img = getPhoto(photo);
-const dark = tone === 'navy' || tone === 'deep';
 ---
 
 <figure
-  class:list={['frame', `frame--${tone}`, { 'frame--photo': img, 'frame--bare': bare, 'on-light': !dark }, cls]}
+  class:list={['frame', `frame--${tone}`, { 'frame--photo': img, 'frame--bare': bare }, cls]}
   style={ratio ? `aspect-ratio:${ratio}` : undefined}
   {...rest}
 >
@@ -80,12 +79,12 @@ const dark = tone === 'navy' || tone === 'deep';
     position: relative;
     overflow: hidden;
     background: var(--mist);
-    color: var(--navy);
+    color: var(--ink);
     isolation: isolate;
   }
   .frame--navy { background: var(--navy); color: var(--white); }
   .frame--deep { background: var(--navy-900); color: var(--white); }
-  .frame--white { background: var(--white); }
+  .frame--white { background: var(--mist-2); }
 
   .frame-media, .frame-media img {
     width: 100%; height: 100%;

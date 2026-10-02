@@ -16,12 +16,13 @@
   --navy-800: #0e183b;
   --navy-700: #17234f;
   --navy-600: #24315f;
-  --mist: #eaeef5;
-  --mist-2: #dfe4ee;
-  --ink: var(--navy);
-  --ink-soft: #3b4466;
-  --line: rgb(14 24 59 / 0.14);
-  --line-strong: rgb(14 24 59 / 0.32);
+  --paper: #000000;
+  --mist: #101114;
+  --mist-2: #1a1b20;
+  --ink: var(--white);
+  --ink-soft: rgb(248 251 254 / 0.72);
+  --line: rgb(248 251 254 / 0.14);
+  --line-strong: rgb(248 251 254 / 0.3);
   --line-on-dark: rgb(248 251 254 / 0.16);
 
   /* Tipografia */
@@ -52,7 +53,7 @@
   --dur: 0.6s;
 
   --header-h: 84px;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* -------------------------------------------------- Reset enxuto */
@@ -68,7 +69,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--white);
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--fs-base);
@@ -131,7 +132,7 @@ p { text-wrap: pretty; }
 }
 .hl { color: var(--yellow); }
 .mark {
-  background: linear-gradient(transparent 62%, var(--yellow) 62%, var(--yellow) 92%, transparent 92%);
+  background: linear-gradient(transparent 80%, var(--yellow) 80%, var(--yellow) 94%, transparent 94%);
   padding-inline: 0.06em;
 }
 

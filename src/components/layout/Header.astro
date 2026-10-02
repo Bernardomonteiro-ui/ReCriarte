@@ -57,14 +57,14 @@ const { tone = 'light' } = Astro.props;
   .hdr {
     position: fixed; inset: 0 0 auto; z-index: 80;
     height: var(--header-h);
-    color: var(--navy);
+    color: var(--ink);
     transition: height 0.5s var(--ease-out), background-color 0.5s, color 0.5s, box-shadow 0.5s;
   }
   .hdr--dark { color: var(--white); }
   .hdr.is-scrolled {
     --header-h: 68px;
-    background: var(--white);
-    color: var(--navy);
+    background: var(--paper);
+    color: var(--ink);
     box-shadow: 0 1px 0 var(--line);
   }
   .hdr.is-hidden { transform: translateY(-100%); }
